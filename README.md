@@ -60,7 +60,7 @@ Here is the minimum code to display "Hello World !" :
       </body>
     </html>
 
-A more sofisticated example is provided by the damoSeed example, that you can download from the [home page], as well as getting the source doc and the user guide. 
+A more sofisticated example is provided by the damoSeed example, that you can download from the [home page][0], as well as getting the source doc and the user guide. 
 
 
 
