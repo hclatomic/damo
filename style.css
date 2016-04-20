@@ -1,0 +1,92 @@
+body {
+	font-family : arial,helvetica;
+	background : #eee;
+}
+h2,h2,h3,h4,h5,h6 {
+	padding:0;
+	margin:0;
+}
+table {
+	
+	border-top:1px solid #888;
+	border-left:1px solid #888;
+	border-collapse:collapse;
+	width : 100%;
+}
+input {
+	width : 70px;
+	text-align:right;
+	padding-right:4px;
+}
+td,th {
+	border-bottom:1px solid #888;
+	border-right:1px solid #888;
+	padding : 5px;
+}
+td {
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.title {
+	color : #864;
+	text-align:right;
+}
+.titlePromo {
+	color : #d80;
+	text-align:right;
+}
+.promotion {
+	background : #ccc;
+	padding : 20px;
+	color:#444;
+	margin:20px;
+	border : 2px solid #864;
+	border-radius : 10px;
+	box-shadow: 5px 5px 5px #888888;
+}
+.list {
+	background : #3FD5BB;
+	padding : 20px;
+	margin-top : 10px;
+	color:#444;
+	border : 2px solid #864;
+	border-radius : 10px;
+	box-shadow: 5px 5px 5px #888888;
+}
+.nav {
+	text-align:right
+}
+.header {
+	color:#fff;
+	background:#864;
+	padding : 10px;
+	margin-bottom : 10px;
+	border-radius : 0 0 10px 10px ;
+	margin:0;
+	width: calc(100% - 20px);
+	box-shadow: 5px 5px 5px #888888;
+	
+}
+a {
+	color:#fff;
+}
+input[type="radio"],input[type="checkbox"]{
+	width:10px;
+}
+ul {
+	font-size : 12px;
+	padding-left : 18px;
+	list-style-type: circle;
+}
+.comment {
+	padding : 20px;
+}
+.phrase {
+	padding-left:30px;
+	font-style:italic;
+	font-size : 20px;
+	font-family:times;
+}
+
