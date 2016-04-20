@@ -60,28 +60,9 @@ Here is the minimum code to display "Hello World !" :
       </body>
     </html>
 
-A more sofisticated example is provided by the [damoSeed][0], that you can [download][1]. The [User guide][2] will give you more explanations on how Damo works. 
+A more sofisticated example is provided by the damoSeed example, that you can download from the [home page], as well as getting the source doc and the user guide. 
 
-### 
 
-## [Home][3]
-
-##### [Download
-_D
-a
-m
-o_
-][4]
-
-##### [Example][0]
-
-##### [Download Example][1]
-
-##### [User Guide][2]
-
-##### [Source doc][5]
-
-##### GitHub
 
 ---
 
