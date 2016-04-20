@@ -1,0 +1,59 @@
+<div damo-if="seed.promotion" class="promotion">
+	<h2 class="titlePromo">Promotion</h2>
+	<h3 id="seed.title"></h3>
+	<div id="seed.author" style="font-style:italic"></div>
+	<div style="margin-bottom:10px;text-align:right">
+		Price : 
+		<input id="seed.price">&nbsp;&nbsp;&nbsp;&nbsp;
+		<span style="font-weight:bold;color:#d80">
+			<span id="seed.price" damo-filter="numFilter"></span> &euro; /		
+			<span id="seed.price" damo-filter="euroToDollar"></span> $
+		</span>
+	</div>
+	<table>
+		<tr>
+			<th>Promo</th>
+			<th>InStock</th>
+			<th>Publics</th>
+			<th>Buyers</th>
+		</tr>
+		<tr>
+			<td>
+				<select id="seed.promotion">
+					<option value="true">true</option>
+					<option value="false">false</option>
+				</select>
+			</td>
+			<td>							
+				yes<input type="radio" id="seed.inStock" name="seed.inStock" value="true"><br>
+				no&nbsp;&nbsp;<input type="radio" id="seed.inStock" name="seed.inStock" value="false">
+			</td>
+			<td>
+				<table>
+					<tr>
+						<td>kids</td>
+						<td>adults</td>
+						<td>male</td>
+						<td>female</td>
+					</tr>
+					<tr>
+						<td><input type="checkbox" id="seed.publics.kids"></td>
+						<td><input type="checkbox" id="seed.publics.adults"></td>
+						<td><input type="checkbox" id="seed.publics.male"></td>
+						<td><input type="checkbox" id="seed.publics.female"></td>
+					</tr>
+				</table>
+			</td>
+			<td>
+				<ul>
+					<li damo-loop="one in seed.buyers" id="one.name">
+						<span id="one.name" damo-filter="euroToDollar"></span> /
+						<span id="one.date" damo-filter="euroToDollar">
+					</li>
+				</ul>
+				
+			</td>
+		</tr>
+	</table>
+	
+</div>

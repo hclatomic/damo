@@ -1,0 +1,16 @@
+<div class="list">
+	<h2>Info Page</h2>
+
+	<div damo-if="!promotion || !promotion.length">
+		No promotion selected
+	</div>
+
+	<div damo-if="promotion && promotion.length">
+		The first promo in the list :
+	<myPromotion damo-seed="promotion[0]" damo-if="promotion.length"></myPromotion>
+	</div>
+
+	<div style="margin-top:30px;">
+		Go back <button damo-trigger="changePage('/')">Home</button>
+	</div>
+</div>

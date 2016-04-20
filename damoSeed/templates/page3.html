@@ -1,0 +1,27 @@
+<div class="list">
+	<table style="background:#ccc">
+		<tr>
+			<th>Title</th>
+			<th>Promo</th>
+			<th>Price</th>
+			<th>Buyers</th>
+		</tr>
+		<tr damo-loop="book in books">
+			<td><span id="book.title"></span></td>
+			<td>
+				<select id="book.promotion">
+					<option value="true">true</option>
+					<option value="false">false</option>
+				</select>
+			</td>
+			<td><input id="book.price"> &euro;</td>
+			<td>
+				<select id="buyers">
+					<option damo-loop="one in book.buyers" value="{{one.name}}">
+						{{one.name}}
+					</option>
+				</select>
+			</td>
+		</tr>
+	</table>
+</div>

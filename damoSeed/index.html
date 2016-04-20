@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Damo Seed</title>
+		<meta charset="utf-8">
+		
+		<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+		<script src="js/damo.min.js"></script>
+
+		<script src="js/routing.js"></script>
+		<script src="js/filter.js"></script>
+		<script src="js/directives.js"></script>
+
+		<link rel="stylesheet" href="css/style.css">
+		<script src="js/myLibrary.js"></script>
+		
+	</head>
+	<body>
+		<div class="header">
+			<h3>Damo Seed</h3>
+			<div style="padding-bottom:10px;">
+				<div class="nav">
+					<span id="user.firstname"></span> <span id="user.familyname"></span> /
+					Go to pages :
+					<a href="javascript:{$scp.$changePage('/infos')}">Infos</a>
+					<a href="javascript:{$scp.$changePage('/table')}">Table</a>
+					<a href="javascript:{$scp.$changePage('/')}">Home</a>
+				</div>
+			</div>
+		</div>
+		<div damo-damo="/">
+			<div class="comment">
+				<textarea id="myComment" style="vertical-align:middle"></textarea> <span id="myComment" class="phrase"></span>
+			</div>
+			<div class="list">
+				<h2 class="title">List <button damo-trigger="toggleList">Toggle</button></h2>
+				<div damo-form="getFormData">
+					<br>
+					<table style="background:#ccc">
+						<tr>
+							<th>Title</th>
+							<th>Promo</th>
+							<th>Price</th>
+							<th>Buyers</th>
+						</tr>
+						<tr damo-loop="book in books">
+							<td><span id="book.title"></span></td>
+							<td>
+								<select id="book.promotion">
+									<option value="true">true</option>
+									<option value="false">false</option>
+								</select>
+							</td>
+							<td><input id="book.price"> &euro;</td>
+							<td>
+								<select id="book.buyers">
+									<option damo-loop="one in book.buyers" value="{{one.name}}">
+										{{one.name}} and {{one.date}}
+									</option>
+								</select>
+							</td>
+						</tr>
+					</table>
+					<br>
+					<button damo-submitform="getFormData">Send to server</button>
+				</div>
+			</div>
+			
+			<div damo-loop="item in promotion">
+				<myPromotion damo-seed="item"></myPromotion>
+			</div>
+		</div>
+	</body>
+</html>
+
