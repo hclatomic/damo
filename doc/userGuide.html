@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Damo : User Guide</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <style>
+		table {
+			border-left : 1px solid #ccc;
+			border-top : 1px solid #ccc;
+			border-collapse : collapse;
+			width : 100%;
+		}
+		td,th {
+			border-right : 1px solid #ccc;
+			border-bottom : 1px solid #ccc;
+			padding : 5px;
+			vertical-align : top;
+		}
+		.prettyprint {
+			border:0;
+			width:calc(100% - 20px);
+			border:1px solid #ccc;
+			margin-left:20px;			
+		}
+		.noma {
+			margin-left:0;			
+			width:100%;
+			border : 0;
+		}
+		.word {
+			color : #008;
+			font-weight:bold;
+		}
+		p {
+			padding-left:20px;
+		}
+		h5 {
+			margin-top:40px;
+		}
+		h5.tdm {
+			margin-top:5px;
+		}
+		.tdm {
+			margin-top:5px;
+		}
+    </style>
+</head>
+
+<body style="padding-left : 10px">
+
+<div id="main">
+
+    <h1 class="page-title">
+ 		<i><span style="color:#00A9FA">D</span>
+		<span style="color:#0d0">a</span>
+		<span style="color:#e00">m</span>
+		<span style="color:#fe0">o</span></i>
+		User Guide
+   </h1>
+ <div style="">
+	 <table style="border:0">
+		<tr>
+			<td colspan="2" style="border:0">
+				<a href="#howto" style="font-weight:bold;font-size:18px;"><b>Howto</b></a><br>
+			</td>
+			<td colspan="2" style="border:0">
+				<a href="#syntax" style="font-weight:bold;font-size:18px;"><b>Syntax & Coding</b></a><br>
+			</td>
+		</tr>
+		<tr>
+			<td style="width:20%;border:0">
+				<a href="#intro">Intro</a><br>
+				<a href="#getstarted">Get Started</a><br>
+				<a href="#jquerybased">JQuery based</a><br>
+				<a href="#twowaydb">Two-way data binding</a><br>
+				<a href="#displaydm">Display the data model</a><br>
+				<a href="#conditions">Conditions</a><br>
+				<a href="#loop">Loop</a><br>
+				<a href="#trigger">Trigger</a><br>
+				<a href="#filters">Filters</a><br>
+			</td>
+			<td style="width:20%;border:0">
+				<a href="#routing">Routing</a><br>
+				<a href="#forms">Forms</a><br>
+				<a href="#directives">Directives</a>
+			</td>
+			<td style="width:20%;border:0">
+				
+				<a href="#script" style="font-weight:bold;font-style:italic">Script :</a><br>
+				<a href="#scp">$scp</a><br>
+				<a href="#scp.dm">$scp.$dm</a><br>
+				<a href="#scp.submiData">$scp.$submiData</a><br>
+				<a href="#scp.Damo">$scp.$Damo</a><br>
+				<a href="#scp.updateView">$scp.$updateView</a><br>
+				<a href="#scp.changePage">$scp.$changePage</a><br>
+				<a href="#scp.routing">$scp.$routing</a><br>
+				<a href="#scp.filter">$scp.$filter</a><br>
+				<a href="#scp.directive">$scp.$directive</a><br><br>
+			</td>
+			<td style="width:20%;border:0">
+				
+				<a href="#htmltemplate" style="font-weight:bold;font-style:italic">Html Templates :</a><br>
+				<a href="#damo-gen">Basics</a><br>
+				<a href="#damo-damo">damo-damo</a><br>
+				<a href="#damo-filter">damo-filter</a><br>
+				<a href="#damo-form">damo-form</a><br>
+				<a href="#damo-loop">damo-loop</a><br>
+				<a href="#damo-seed">damo-seed</a><br>
+				<a href="#damo-submitform">damo-submitform</a><br>
+				<a href="#damo-trigger">damo-trigger</a><br>
+				
+			</td>
+		</tr>
+	 </table>
+</div> 	
+
+	<a name="howto"></a>
+    <h2 style="margin-top:40px">Howto</h2>
+    <a name="intro"></a>
+    <h5>Intro</h5>
+    <p>
+    The idea is : the properties of a json data model shall have a direct conterpart into the html template, and vice versa.
+	<pre class="prettyprint code">
+    //The applicative data model
+    var shop = {
+      ...
+      books : [
+        ...
+        {
+          ...
+          buyers : [
+          ...
+          {
+            name : "Albert"
+          },
+          ]
+        }
+        
+      ]
+    }
+    //Instanciate the $scp.$dm datamodel object
+    $scp.$Damo(shop,function() { ... });
+    ...
+    
+    //$scp.$dm.books[4].buyer[6].name being available, the
+    //template can use :
+    &lt;<i>tagName</i> id="books[4].buyer[6].name"&gt;...&lt;<i>/tagName</i>&gt;
+	</pre>
+	</p>
+
+	
+</p>
+    <a name="getstarted"></a>
+    <h5>Get started</h5>
+    <p>
+	It is very simple to initialize Damo. You just have to call <span class="mycode">$scp.$Damo(dataModel[,prog])</span>, where <span class="mycode">dataModel</span> is either an url, either a JSON objet. In case of an url, the server that will return the data must send JSON data.<br>
+	The optional <span class="mycode">prog</span> is a function that will be executed after the first loading of the app. Typically this is where you manipulate the variables and functions needed to make your application alive, as doing somthing on a click for instance.
+	<pre class="prettyprint code">
+&lt;script&gt;
+  //Get a data model, either by calling an url :
+  myDataModel = 'http://myhost.com/server/getData';
+  //or by building it inside the script :
+  myDataModel = { ... };
+
+  //Then start Damo	 
+  $scp.$Damo(myDataModel,function() {
+    //here comes your code managing the app after loading it
+    ...
+  });			
+&lt;/script&gt;</pre>
+	<p>Once loaded, the data model is available in the Damo's variable <span class="mycode">$scp.$dm</span>
+	for instance :<p>
+	<pre class="prettyprint code">
+//data model
+shop = {
+  ...
+  books : [
+	...
+	{
+	  price : 123.4
+	  ...
+	}
+  ]
+}
+
+//Damo's start
+$scp.$Damo(shop,function() { ... });
+
+//Damo's data model
+$scp.$dm.books[3].price  </pre>
+
+
+	<p>Of course the script must have an html counterpart to display the properties of the data model. The two-way data binding is based on the ids of the html tags, that must correspond to the data model, for example :</p>
+	<pre class="prettyprint code">
+//Damo's data model
+$scp.$dm.books[3].price 
+		
+//html counterpart
+&lt;div id="books[3].price"&gt;&lt;/div&gt;</pre>
+
+
+
+    <a name="twowaydb"></a>
+    <h5>Two-way data binding</h5>
+    <p>
+    Each time a property of the datamodel is changed in the template, with an input, a select or a textarea, the whole applicative data model <span class="mycode">$scp.$dm</span> is automatically updated and the template view is updated to reflect the modification.<br>
+    However when a property of the data model is changed in the script, a <span class="mycode">$scp.$updateView()</span> must be launched for the template to reflect the change. This avoids a dirty checking to monopolize system resources and to cause asynchronous misbehaviors. Therefore the script -> template update has to be programmatically written as so :
+	<pre class="prettyprint code">
+$scp.$updateView();</pre>
+	</p>
+	<p>If the view update is necessary before inserting some code, the usage of <span class="mycode">$.when(...).done(function() {...})</span> is also necessary, to be sure to apply the code on the fresh view. As an example :</p>
+	<pre class="prettyprint code">
+  $scp.promotion = setPromo($scp.$dm.books);
+  $scp.$updateView().done(function() {
+
+    $('input[id$="price"]').change(function() {
+      console.log('-->change promotion price');
+      $scp.$updateView();
+    });
+    $('select[id$="promotion"]').change(function() {
+      console.log('-->change promotion status');
+      $scp.promotion = setPromo($scp.$dm.books);
+      $scp.$updateView();
+    });
+  });
+</pre>
+	
+    <a name="displaydm"></a>
+    <h5>Display the data model</h5>
+    <p>
+    The tags of the html template are connected to the applicative data model, and the variables of the scope,  by their ids :</p>
+ 	<pre class="prettyprint code" style="width:100%;border:1px solid #ccc"><<i>tagName</i> id="<i>dataModelPropertyName</i>"></pre>
+
+     <p>In these expressions <span class="mycode"><i>dataModelPropertyName</i></span> is of type : <span class="mycode">books[4].buyer[6].name</span> and is the counterpart of the property <span class="mycode">$scp.$dm.books[4].buyer[6].name</span> of the datamodel.
+     </p>
+
+	<p>There is however an exception for the <b>option</b> tag. Indeed This tag can not include any html tag, but just text. So we can not use something like this :</p>
+	<pre class="prettyprint code">
+//bad way of settig up an option
+&lt;option value="books[4].buyer[6].name"&gt;&lt;span id="books[4].buyer[6].name"&gt;&lt;/span&gt;&lt;/option&gt;</pre>
+<p>In this case we use the <span class="mycode">{{...}}</span> pattern like this :</p>
+	<pre class="prettyprint code">
+//bad way of settig up an option
+&lt;option value="books[4].buyer[6].name"&gt;{{books[4].buyer[6].name}}&lt;/option&gt;</pre>
+
+     
+    <a name="conditions"></a>
+     <h5>Conditions</h5>
+    <p>
+    The display of an HTML element might be conditional, depending on a scope variable, function or a data model variable. The syntax to use is the following :</p>
+<pre class="prettyprint code">
+&lt;<i>tagName</i> damo-if="<i>condition</i>"&gt;...&lt;/<i>tagName</i>&gt;</pre>
+	<p>The evaluation is made on the truth of the condition. This last may be the result of a function, an expression using <span class="mycode">! == != < <= > >= ==</span>, or the simple presence of a scope variable <span class="mycode">$scp.myVar</span>. Some examples :</p>
+<pre class="prettyprint code" style="width:100%;border:1px solid #ccc">
+//corresponding to what the function $scp.myFunction() returns
+&lt;<i>tagName</i> damo-if="myFunction()"&gt;...&lt;/<i>tagName</i>&gt;
+//corresponding to $scp.myVar
+&lt;<i>tagName</i> damo-if="myVar"&gt;...&lt;/<i>tagName</i>&gt;
+&lt;<i>tagName</i> damo-if="myVar >= 26"&gt;...&lt;/<i>tagName</i>&gt;
+&lt;<i>tagName</i> damo-if="myVar != myOtherVar"&gt;...&lt;/<i>tagName</i>&gt;
+//corresponding to $scp.$dm.books[4].buyer[6].name
+&lt;<i>tagName</i> damo-if="books[4].buyer[6].name.length>20"&gt;...&lt;/<i>tagName</i>&gt;</pre>
+
+
+
+
+    <a name="loop"></a>
+    <h5>Loop</h5>
+    <p>You might have lists to display, and furthermore lists with a changing length along the application, and that could be fastidious to code. Damo provides a tag attribute that will handle this kind of problem. Here is an example :</p>
+<pre class="prettyprint code" style="width:100%;border:1px solid #ccc">
+&lt;ul&gt;
+  &lt;li damo-loop="book in books" id="book.name"&gt;&lt;/li&gt;
+&lt;/ul&gt;</pre>
+	<p>In this example the li tag will be fed with <span class="mycode">$scp.$dm.books[i].name</span>.
+	Any sort of html tag can be repeated this way.</p>
+
+    
+    <a name="trigger"></a>
+    <h5>Trigger</h5>
+     <p>This is an equivalent of the click() function of Jquery, except that only the name of the function is needed (no parenthesis). Here is an example :</p>
+<pre class="prettyprint code" style="width:100%;border:1px solid #ccc">
+&lt;div damo-trigger="myTriggerFunction"&gt;&lt;/div&gt;</pre>
+	<p>This syntax will trigger the function when the html tag is clicked.</p>
+
+	
+    <a name="filters"></a>
+   <h5>Filters</h5>
+    <p>The values of the data model, and the variables of the scope, can be first filtered before being displayed. This is made by two ways :
+    <ul style="">
+		<li>
+			by their ids :<pre class="prettyprint code"><<i>tagName</i> id="<i>dataModelPropertyName</i>" damo-filter="<i>filterName</i>"></pre>
+		</li>
+		<li>
+			by the connector expression  :<pre class="prettyprint code">{{<i>dataModelPropertyName</i> | <i>filterName</i>}}</pre>
+		</li>
+     </ul>
+     <p>In these expressions <span class="mycode"><i>filterName</i></span> is the name of the function that will be used to filter the value, i.e. <span class="mycode">$scp.$filter.filterName()</span>.<br>
+     The filters can only be a method of the object <span class="mycode">$scp.$filter</span>, it can be coded inside the main script or included in a javascript file in the header of the index.html. Example :</p>
+     <pre class="prettyprint code">
+$scp.$filter.numFilter = function(num) {
+  num = parseFloat(num);
+  return num.toFixed(2);
+};</pre>
+
+    <a name="routing"></a>
+    <h5>Routing</h5>
+	<p>Damo is designed for single page applications, but as you know, this kind of applications must exhibit many pages. So Damo is equiped of a routing array that describe, for each page, the url to display in the browser"s address bar, and the url of the template. The routing array is a member of the scope <span class="mycode">$scp</span>. It can be declared inside the main script or included from one (or many) javascript file in the header of index.html. It must respect the following format : </p>
+     <pre class="prettyprint code">
+$scp.$routing = [
+  {
+    url : '/myPage',
+    template : 'templates/mypage.html'
+  },
+  ...
+};</pre>
+	<p>If this routing array is not empty, it is possible to change the page by calling :
+	<pre class="prettyprint code">$scp.$changePage('<i>/myPage</i>');</pre></p>
+	<p>Note that the back and forward buttons of the browser are then operationals, but a reload leads back to the home page.</p>
+    
+    <a name="forms"></a>
+    <h5>Forms</h5>
+	<p>A form must be enclosed into a specific tag, and have a trigger to get the key/value data. It must respect the following syntax :</p>
+     <pre class="prettyprint code">
+//form tag
+&lt;div damo-form="<i>myTriggerFunction</i>"&gt;
+...
+&lt;/div&gt;
+//trigger of the form, could be inside the form tag
+&lt;button damo-formsubmit="<i>myTriggerFunction</i>"&gt;Go Submit&lt;/button&gt;</pre>
+<p>The script counterpart must be a function <span class="mycode">$scp.myTriggerFuntion()</span> in which the reserved array <span class="mycode">$scp.$submitData</span>,instanciated with the key/value data of the form, is available as soon as the trigger has been fired. An example could be :</p>
+     <pre class="prettyprint code">
+$scp.myTriggerFunction = function() {
+    console.log($scp.$submitData);
+};</pre>
+<p>Note that the click() trigger of the damo-formsubmit tag can not be modified, all the needed actions must be included to the damo-submitform function.</p>
+
+    <a name="directives"></a>
+    <h5>Directives</h5>
+ <p>A directive is a non standard html tag that stands for an entire template. The directives might be included in the main index.html, with one or many files, respecting the <span class="mycode">$scp.$directive</span> object format. This template shall have its own data model, i.e. all the ids of the elements must refer to a root object, called <span class="mycode">seed</span>. This seed enables to connect with the main datamodel <span class="mycode">$scp.$dm</span>, by yhe mean of the current template. For instance :</p>
+<pre class="prettyprint code">
+&lt;div damo-loop="item in books"&gt;
+  &lt;myShop damo-seed="item"&gt;&lt;/shop&gt;
+&lt;/div&gt;</pre>
+	<p>To make a directive available, it shall be a member of the <span class="mycode">$scp.$directive</span> object with the following format :</p>
+				<pre class="prettyprint code">
+$scp.$directive = {
+  <i>directiveName</i> : {
+    seed : "<i>directiveSeed</i>",
+    template : "<i>pathToTemplate</i>"
+  },
+  ...
+}</pre>
+
+     <a name="syntax"></a>
+   <h2 style="margin-top:40px">Syntax</h2>
+     <a name="htmltemplate"></a>
+    <h4>HTML template</h4>
+
+    <table border="1">
+		<tr>
+			<th>Word</th>
+			<th>Pattern</th>
+			<th>Usage</th>
+		</tr>
+ 		<tr>
+			<td class="word"><a name="damo-gen"></a></td>
+			<td>
+				<pre class="prettyprint code noma">&lt;<i>tagName</i> damo-<i>key</i>="<i>value</i>"&gt;
+...
+&lt;<i>/tagName</i>&gt;</pre>
+or for option tags :
+				<pre class="prettyprint code noma">
+&lt;option value="<i>dataModelId</i>"&gt;
+  {{<i>dataModelVariable</i>}}
+&lt;/option&gt;</pre>
+			</td>
+			<td>This is the reference format for all the Damo's Html tags. The words in <i><b>italic</b></i> have to be replaced by the significant words.</td>
+		</tr>
+  		<tr>
+			<td class="word">damo<a name="damo-damo"></a></td>
+			<td>
+				<pre class="prettyprint code noma">&lt;div damo-damo="<i>url</i>"&gt;
+...
+&lt;/div&gt;</pre>
+			</td>
+			<td>
+				This tag is made to enclose a page of the application. The url is described in the routing.js file as <span class="mycode">$scp.routing[i].url</span>
+			</td>
+		</tr>
+  		<tr>
+			<td class="word">filter<a name="damo-filter"></a></td>
+			<td>
+				<pre class="prettyprint code noma">&lt;<i>tagName</i> id="<i>varId</i>" damo-filter="<i>filterName</i>"&gt;
+...
+&lt;<i>/tagName</i>&gt;</pre>
+or for option tags :
+				<pre class="prettyprint code noma">
+&lt;option value="<i>varId</i>"&gt;
+  {{<i>varId</i> | <i>filterName</i>}}
+&lt;/option&gt;</pre>
+
+			</td>
+			<td>
+				This pattern applies a filter to the concerned variable having the data model id <i>varId</i>, e.g. <span class="mycode">shop.books[2].promo.price</span>. 
+			</td>
+		</tr>
+  		<tr>
+			<td class="word">form<a name="damo-form"></a></td>
+			<td>
+				<pre class="prettyprint code noma">&lt;<i>tagName</i> damo-form="<i>functionName</i>"&gt;
+...
+&lt;<i>/tagName</i>&gt;</pre>
+			</td>
+			<td>
+				This patterns enclose a form. Each element inside this tag will be considered as being a modifiable data that will have to be returned to the server, or whatever process. The function <span class="mycode"><i>functionName</i></span> will be triggered when the element <span class="mycode">&lt;<i>tagName</i> damo-submitform="<i>functionName</i>" ...&gt;</span> is clicked, but before this the variable <span class="mycode">$scp.$submitData</span> will be fed with the key/value data of the form.
+			</td>
+		</tr>
+		<tr>
+			<td class="word">loop<a name="damo-loop"></a></td>
+			<td>
+				<pre class="prettyprint code noma">&lt;<i>tagName</i> damo-loop="<i>arrayName</i>"&gt;
+...
+&lt;<i>/tagName</i>&gt;</pre>
+			</td>
+			<td>
+				This pattern calls a loop base of the content of the array which name is <i>arrayName</i>. The <i>tagName</i> can be of varous type : div, td, tr, option, li, or anything else. 
+			</td>
+		</tr>
+		<tr>
+			<td class="word">seed<a name="damo-seed"></a></td>
+			<td>
+				<pre class="prettyprint code noma">&lt;<i>directiveName</i> damo-seed="<i>seedName</i>"&gt;
+...
+&lt;<i>/directiveName</i>&gt;</pre>
+			</td>
+			<td>
+				This pattern indicates which word will be considered as the root data of the directive (see <a href="">Directives</a>). 
+			</td>
+		</tr>
+		<tr>
+			<td class="word">submitform<a name="damo-submitform"></a></td>
+			<td>
+				<pre class="prettyprint code noma">&lt;<i>tagName</i> damo-submitform="<i>functionName</i>"&gt;
+...
+&lt;<i>/tagName</i>&gt;</pre>
+			</td>
+			<td>
+				This pattern calls the function which name is <i>functionName</i>, when the concerned <i>tagName</i> is clicked. After the click the system first feeds the variable <span class="mycode">$scp.$submitData</span> which contains all the key/value data contained in the form.
+				
+			</td>
+		</tr>
+		<tr>
+			<td class="word">trigger<a name="damo-trigger"></a></td>
+			<td>
+				<pre class="prettyprint code noma">&lt;<i>tagName</i> damo-trigger="<i>functionName</i>"&gt;
+...
+&lt;<i>/tagName</i>&gt;</pre>
+			</td>
+			<td>
+				This pattern calls the function which name is <i>functionName</i>, when the concerned <i>tagName</i> is clicked.
+				
+			</td>
+		</tr>
+   </table>
+
+
+
+
+   
+
+     <a name="script"></a>
+    <h4>Script</h4>
+
+    <table border="1">
+		<tr>
+			<th>Pattern</th>
+			<th>Usage</th>
+		</tr>
+ 		<tr>
+ 			<td><a name="scp"></a>
+				<pre class="prettyprint code noma">$scp</pre>
+			</td>
+			<td>
+				This is the main scope of Damo. As a good practice you can add any member or method to it, but try to keep the <span class="mycode">$scp.$<i>xxxx</i></span> pattern reserved for Damo. Prefer to use <span class="mycode">$scp.<i>xxxx</i></span>. All the variables and methods that you will need for your application shall be a member or method of <span class="mycode">$scp</span>, in order to allow the two-way data binding.<br>Note that any method added to <span class="mycode">$scp</span> becomes a service, at an angular point of view, but it is immediatly available to the whole scope, for all pages.
+			</td>
+		</tr>
+ 		<tr>
+ 			<td><a name="scp.dm"></a>
+				<pre class="prettyprint code noma">$scp.$dm</pre>
+			</td>
+			<td>
+				This is the reserved object that will contain the entire json data model of the application.
+			</td>
+		</tr>
+ 		<tr>
+ 			<td><a name="scp.submiData"></a>
+				<pre class="prettyprint code noma">$scp.$submiData</pre>
+			</td>
+			<td>
+				This is the reserved array where is stored the key/value data of a form, as soon as the trigger function of the form have been fired.
+			</td>
+		</tr>
+ 		<tr>
+ 			<td><a name="scp.Damo"></a>
+				<pre class="prettyprint code noma">$scp.$Damo(<i>json</i> | <i>url</i> [,<i>prog]</i>)</pre>
+			</td>
+			<td>
+				This is the first expression to insert to your application script. It will feed the datamodel  <span class="mycode">$scp.$dm</span> with the provided <i>json</i>, either directly, or asking it to an <i>url</i>. The optional <i>prog</i> is a function that contains all the application code and that will be applied after the build of the first view.
+			</td>
+		</tr>
+ 		<tr>
+ 			<td><a name="scp.updateView"></a>
+				<pre class="prettyprint code noma">$scp.$updateView()</pre>
+			</td>
+			<td>
+				The two-way data binding of Damo is not automatic, this avoid a dirty checking to monopolize system resources and to cause asynchronous misbehaviors. The view will be updated only if you ask for it. 
+			</td>
+		</tr>
+ 		<tr>
+ 			<td><a name="scp.changePage"></a>
+				<pre class="prettyprint code noma">$scp.$changePage(<i>pageUrl</i>)</pre>
+			</td>
+			<td>
+				This expression will change the current page for the required <i>page</i>. It might be called by clicking any tag, or inside a link with the following format :
+				<pre class="prettyprint code noma">&lt;a href="javascript:{$scp.$changePage('<i>pageUrl</i>')}"&gt;...&lt;/a&gt;</pre>
+			</td>
+		</tr>
+ 		<tr>
+ 			<td><a name="scp.routing"></a>
+				<pre class="prettyprint code noma">
+$scp.$routing = [
+  {
+    url : "<i>pageUrl</i>",
+    template : "<i>pathToTemplate</i>"
+  },
+  ...
+]</pre>
+			</td>
+			<td>
+				<span style="color:#c00;font-weight:bold">[optional Array]</span> If you whish to setup a single page application, with many pages, this is how you shall provide the routing of the different pages. This might be done by including one (or many) javascript file in the index.html, containing the <span class="mycode">$scp.$routing</span> array. The <i>url</i> is what will appear in the browser's address bar, the default being "/" if no routing have been given. The <i>template</i> is a string giving the path to the concerned template, e.g. <span class="mycode">myFiles/templates/myTemplate.html</span>. The default template is "index.html" that must be present in case no routing is specified.
+			</td>
+		</tr>
+ 		<tr>
+ 		<tr>
+ 			<td><a name="scp.filter"></a>
+				<pre class="prettyprint code noma">
+$scp.$filter = {
+  <i>filterName</i> : function(data) {
+    //your code here ...
+    return <i>filteredData</i>;
+  },
+  ...
+}</pre>
+			</td>
+			<td>
+				<span style="color:#c00;font-weight:bold">[optional Object]</span> You might need filters to display your data. For instance you could whish to display an icone in case of a particular value. All filters are methods of the object <span class="mycode">$scp.$filter</span>.You might provide the filters by including one (or many) javascript file in the index.html, containing the <span class="mycode">$scp.$filter</span> object. 
+				There are two ways to use filters :
+				<pre class="prettyprint code noma">&lt;<i>tagName</i> id="<i>varId</i>" damo-filter="<i>filterName</i>"&gt;...&lt;<i>/tagName</i>&gt;</pre>
+or
+				<pre class="prettyprint code noma">{{<i>varId</i> | <i>filterName</i>}}</pre>
+
+			</td>
+		</tr>
+ 		<tr>
+ 			<td><a name="scp.directive"></a>
+				<pre class="prettyprint code noma">
+$scp.$directive = {
+  <i>directiveName</i> : {
+    seed : "<i>directiveSeed</i>",
+    template : "<i>pathToTemplate</i>"
+  },
+  ...
+}</pre>
+			</td>
+			<td>
+				<span style="color:#c00;font-weight:bold">[optional Object]</span> A directive is a non standard html tag that stands for an entire template. The directives might be included in the main index.html, with one or many files, respecting the <span class="mycode">$scp.$directive</span> object format. This template shall have its own data model, i.e. all the ids of the elements must refer to a root object, called <span class="mycode">seed</span>. This seed enables to connect with the main datamodel <span class="mycode">$scp.$dm</span>, by yhe mean of the current template. For instance :
+				<pre class="prettyprint code noma">
+&lt;div damo-loop="item in books"&gt;
+  &lt;myShop damo-seed="item"&gt;&lt;/shop&gt;
+&lt;/div&gt;</pre>
+			</td>
+		</tr>
+	</table>
+
+    
+
+
+    <h3> </h3>
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2>
+    <h5 class="tdm"><a href="damoSeed/js/damo.js.zip">Download
+		<i><span style="color:#00A9FA">D</span>
+		<span style="color:#0d0">a</span>
+		<span style="color:#e00">m</span>
+		<span style="color:#fe0">o</span></i> 
+    </a></h5>
+    <h5 class="tdm"><a href="damoSeed">Example</a></h5>
+    <h5 class="tdm"><a href="damoSeed.zip">Download Example</a></h5>
+    <h5 class="tdm"><a href="userGuide.html">User Guide</a></h5>
+    <h5 class="tdm"><a href="$scp.html">Source doc</a></h5>
+    <h5 class="tdm"><a href="">GitHub</a></h5>
+<ul>
+	<hr style="height: 1px;margin: 20px;padding: 0;background-color: #ccc;border: 0;">
+    <li style="margin:20px;font-size:14px;font-weight:bold;color:#888"><i>"Although Damo is based on <a href="https://jquery.com/" style="color:#0095dd">JQuery</a>, and 100% compatible, it provides the advantages of <a href="https://angularjs.org/" style="color:#0095dd">Angular.js</a>, without the boring aspects, and much simply"</i></li>
+	<hr style="height: 1px;margin: 20px;padding: 0;background-color: #ccc;border: 0;">
+    <li>Licencing : <a href="http://www.gnu.org/licenses/gpl.html" style="color:#0095dd">GPL</a></li>
+    <li>Author : <a href="mailto:hcl@oceanvirtuel.com" style="color:#0095dd">hcl@oceanvirtuel.com</a></li>
+</ul>
+   
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Fri Apr 15 2016 13:31:20 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

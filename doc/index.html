@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Damo: Home</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+<style>
+   p {
+			padding-left:20px;
+		}
+</style>
+ 
+</head>
+
+<body>
+
+<div id="main">
+
+<div style="background:#fff;padding-bottom:20px;margin-bottom:20px;margin-right:10px;">
+    <p style="text-align:center;letter-spacing:20px;font-size:84px;font-style:italic;margin:0">
+		<span style="color:#00A9FA">D</span>
+		<span style="color:#0d0">a</span>
+		<span style="color:#e00">m</span>
+		<span style="color:#fe0">o</span> 
+	</p>
+	
+	<h6 style="text-align:center;color:#00A9FA;font-size:20px;line-height:35px">
+		Javascript MVC framework for 2 way data binding
+		<div style="text-align:center;color:#888;font-size:16px;line-height:18px;margin-top:20px">
+				Designed for front-end development<br>
+				100% JQuery based and compatible<br>
+				Light weight : less than 15ko
+		</div>
+	</h6>
+</div>
+
+    <h4>What is Damo ?</h4>
+    <p>Damo is a javascript MVC framework designed for <b>rapid</b> but <b>clean</b> and <b>structured</b> front-end developpement.</p>
+	<div>&nbsp;</div>
+    <h4>When using Damo ?</h4>
+    <p>Each time you need a two-way data binding MVC framework, to shorten your development time.</p>
+
+	<div>&nbsp;</div>
+    <h4>Why Damo ?</h4>
+    <p>Damo is coming from three observations about the 2016 universe of the front-end developpement :
+    <ul>
+		<li>AngularJS is a wonderful tool to shorten the developpement by the use of the two-way data binding. Unfortunately it is hard to learn and to use, as it requires a complete new way of thinking for the developper. Furthermore it badly cooperative when you try to integer some external libraries, even JQuery. Everything is asynchronous, even if it is useless, and that makes the Angular touchy, especially when building rich and massive applications. </li>
+		
+		<li>Google also seems to think so, i.e. Angular is not achieved, and this might be why they are publishing Angular 2 ... which is not even compatible with Angular 1, and is structured absolutly differently (no scope, no ng-model, no two-way data binding, new syntax, ...). So far Google/Angular seems then to be a dead end for our business necessities that need consistency.</li>
+		
+		<li>JQuery is far more stable and reliable than Angular. Large and rich  applications can be developped with it, but it does not provide the two-way data binding. Consequently it takes a longer time, and code, to develop with Jquery.</li>
+    </ul></p>
+    <p>So, I decided to develop a library based on JQuery, keeping its simple coding fashion, but providing the two-way binding like Angular. Doing so I whish to get the stability of JQuery as well as the rapid development possibility provided by Angular. The objective is to provide a way to develop front-end applications quickly, but not dirty, with short codes and with a well structured architecture that minimize the possibility of bugs.<br><br></p>
+
+    <h4>Data Model</h4>
+    <p>It is fundamental to note that the javascript libraries (JQuery, Angular, ...) are part of the problem for a front-end development, but the structuration of the data is an other part, which is of crucial importance. Actually <b>Damo</b> stands for <b>Da</b>ta <b>mo</b>del, which is the key element of Damo's engine. A well structured applicative data model, under a json format, reduces drastically the code to produce, when you need to manipulate the data. <b>This is the main idea behind Damo.</b></p>
+
+	<div style="margin:20px"></div>
+    <h4>Modularity</h4>
+   <p>Damo's is all made of modules. Filters, directives, functions (equivalent of Angular.js's services), are all loadable from any external library, directly by inclusion inside the header of the index.html. For instance it is trivial to load and use jquery-ui if needed, or any home made processing library already coded for an other application.</p>
+
+	<div style="margin:20px"></div>
+    <h4>Simplicity</h4>
+   <p>Damo's is made simple to reduce the complexity of the application as much as possible. There is nos special syntax, nor module provider, nor Jqlite, ... as it is in Angular.js for instance. There are very few base functions, and very few specific html tag. Damo has been designed to be as simple as JQuery.
+   </p>
+
+	<div style="margin:20px"></div>
+    <h4>Getting started</h4>
+			<p>Here is the minimum code to display "Hello World !" :</p>
+			<pre class="prettyprint code" style="width:100%;margin-left:20px">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;Damo mini&lt;/title&gt;
+    &lt;meta charset="utf-8"&gt;    
+    &lt;script src="http://code.jquery.com/jquery-1.10.2.js"&gt;&lt;/script&gt;
+    &lt;script src="damo.min.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+      $scp.$Damo({ myText : 'Hello World !' });
+    &lt;/script&gt;    
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id="myText"&gt;&lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+			<p>A more sofisticated example is provided by the <a href="damoSeed">damoSeed</a>, that you can <a href="damoSeed.zip">download</a>. The <a href="userGuide.html">User guide</a> will give you more explanations on how Damo works. </p>
+
+
+    <h3> </h3>
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2>
+    <h5><a href="damoSeed/js/damo.js.zip">Download
+		<i><span style="color:#00A9FA">D</span>
+		<span style="color:#0d0">a</span>
+		<span style="color:#e00">m</span>
+		<span style="color:#fe0">o</span></i> 
+    </a></h5>
+    <h5><a href="damoSeed">Example</a></h5>
+    <h5><a href="damoSeed.zip">Download Example</a></h5>
+    <h5><a href="userGuide.html">User Guide</a></h5>
+    <h5><a href="$scp.html">Source doc</a></h5>
+    <h5><a href="">GitHub</a></h5>
+<ul>
+	<hr style="height: 1px;margin: 20px;padding: 0;background-color: #ccc;border: 0;">
+    <li style="margin:20px;font-size:14px;font-weight:bold;color:#888"><i>"Although Damo is based on <a href="https://jquery.com/" style="color:#0095dd">JQuery</a>, and 100% compatible, it provides the advantages of <a href="https://angularjs.org/" style="color:#0095dd">Angular.js</a>, without the boring aspects, and much simply"</i></li>
+	<hr style="height: 1px;margin: 20px;padding: 0;background-color: #ccc;border: 0;">
+    <li>Licencing : <a href="http://www.gnu.org/licenses/gpl.html" style="color:#0095dd">GPL</a></li>
+    <li>Author : <a href="mailto:hcl@oceanvirtuel.com" style="color:#0095dd">hcl@oceanvirtuel.com</a></li>
+</ul>
+    
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Thu Apr 07 2016 13:09:08 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
