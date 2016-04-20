@@ -139,9 +139,9 @@ $scp.$directive.myDirective =  {
 	 * 
 	 **/
 	$config 	: {		
-	  damperDelay      	: 10,
+	  damperDelay      	: 100,
 	  sliderDelay       : 200,
-	  loaderDelay		: 100,
+	  loaderDelay		: 1000,
 	  iterationBreak 	: 10,
 	  DirectiveDepth	: 3
 	},
@@ -787,8 +787,8 @@ $scp.$directive.myDirective =  {
 	 * @extend $scp
 	**/
 	$scp.$Damo = function(obj,prog) {
-		def_Damo = new $.Deferred();
 		$( document ).ready(function() {
+			def_Damo = new $.Deferred();
 			if(!obj) return;
 			
 			if(typeof obj=='string') {
@@ -841,16 +841,18 @@ $scp.$directive.myDirective =  {
 				}
 				$scp.$route.current = $scp.$routing[0].url;
 				$('[damo-damo="'+$scp.$route.current+'"]').attr('damo-damo','damoPage_'+$scp.$route.current);
+
 				$scp.$concatenePages().done(function() {
 					$scp.$buildDirectives().done(function() {
 						$scp.$buildLoops().done(function() {
 							$scp.$buildDmValues(true).done(function() {
 								$scp.$setConditions().done(function() {
 									$scp.$buildForms().done(function() {
+										$scp.$afterLoading()
 										setTimeout(function() {
-											$scp.$afterLoading();
 											def_Damo.resolve();
 										},$scp.$config.damperDelay);
+										
 									});
 								});
 							});
@@ -858,8 +860,8 @@ $scp.$directive.myDirective =  {
 					});
 				});
 			},$scp.$config.loaderDelay);
+			return def_Damo.promise();
 		});
-		return def_Damo.promise();
 	};
 
 	/** 
@@ -872,25 +874,21 @@ $scp.$directive.myDirective =  {
 	**/
 	$scp.$concatenePages = function() {
 		var i;
-		def0_concat = new $.Deferred();
-		def_concat = [];
+		def_concat = new $.Deferred();
+		N = $scp.$routing.length;
 		for(i=0;i<$scp.$routing.length-1;i++) {
-			def_concat[i] = new $.Deferred();
 			$('body').append('<div damo-damo="damoPage_'+$scp.$routing[i+1].url+'"></div>');
 			$('[damo-damo="damoPage_'+$scp.$routing[i+1].url+'"]').css('display','none');
 			$('[damo-damo="damoPage_'+$scp.$routing[i+1].url+'"]')
 				.load($scp.$routing[i+1].template)
 				.promise()
 				.done(function() {
-					def_concat[i].resolve();
+					if(i==$scp.$routing.length-2) {
+						def_concat.resolve();
+					}
 				});
 		}
-
-		setTimeout(function() {
-			def0_concat.resolve();
-		},$scp.$config.damperDelay);
-
-		return def0_concat.promise();
+		return def_concat.promise();
 	};
 	
 	/** 
