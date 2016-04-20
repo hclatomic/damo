@@ -1,6 +1,6 @@
-###### DAMO
+# DAMO
 
-#### Javascript MVC framework for 2 way data binding
+###### Javascript MVC framework for 2 way data binding
 
 Designed for front-end development  
 100% JQuery based and compatible  
