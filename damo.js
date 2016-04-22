@@ -132,7 +132,7 @@ $scp.$directive.myDirective =  {
 	 * <li><span class="mycode">sliderDelay</span> : delay for hide/show</li>
 	 * <li><span class="mycode">loaderDelay</span> : initial loading delay, bigger the app, higher it is</li>
 	 * <li><span class="mycode">iterationBreak</span> : need to be increased when there are many nested levels of directives and loops</li>
-	 * <li><span class="mycode">DirectiveDepth</span> : need to be increased when there are many nested levels of directives</li>
+	 * <li><span class="mycode">directiveDepth</span> : need to be increased when there are many nested levels of directives</li>
 	 * </ul>
 	 *
 	 * @extend $scp
@@ -143,7 +143,7 @@ $scp.$directive.myDirective =  {
 	  sliderDelay       : 200,
 	  loaderDelay		: 1000,
 	  iterationBreak 	: 10,
-	  DirectiveDepth	: 3
+	  directiveDepth	: 3
 	},
 
 	
@@ -391,7 +391,7 @@ $scp.$directive.myDirective =  {
 
 		def_updateloop = $.Deferred();		
 		scope = $('body');
-		for(j=0;j<$scp.$config.DirectiveDepth;j++) {
+		for(j=0;j<$scp.$config.directiveDepth;j++) {
 
 		var previous = false;
 			scope.find('[damo-startloop]').each(function() {
@@ -598,9 +598,8 @@ $scp.$directive.myDirective =  {
 			val = $scp.$seekData(filter,$(this).attr('id'));
 
 
-			if(typeof val != 'object') {
-				
-				val = val=='undefined' ? '' : String(val);
+			if(typeof val != 'object' &&  String(val)!='undefined') {
+				val = String(val);
 				if(tag=='select') {
 					if(withChange) {
 						$(this).change(function() {}); //option:first
@@ -813,10 +812,19 @@ $scp.$directive.myDirective =  {
 				//set routing __________________________________________________
 				if(!$scp.$routing.length) {
 					page = window.location.href.replace(/.*\/([^\/]+)(\?.*)?/, '$1');
-					$scp.$routing.push({
-						url 		: '/',
-						template 	: page
-					});
+					reg = new RegExp('.*\/?([^\/]+)\.html$','i');
+					if(page.match(reg)) {
+						$scp.$routing.push({
+							url 		: '/',
+							template 	: page
+						});
+					}
+					else {
+						$scp.$routing.push({
+							url 		: '/',
+							template 	: 'index.html'
+						});
+					}
 				}
 				else {
 					found = false;
@@ -887,6 +895,9 @@ $scp.$directive.myDirective =  {
 						def_concat.resolve();
 					}
 				});
+		}
+		if($scp.$routing.length==1) {
+			def_concat.resolve();
 		}
 		return def_concat.promise();
 	};
