@@ -761,9 +761,9 @@ $scp.$directive.myDirective =  {
 			}) ;
 		}).promise().done(function() {
 			scope.find('[damo-trigger]').each(function() {
-				$(this).click(function() {
+				$(this).click(function(e) {
 					try {
-						eval('$scp.'+$(this).attr('damo-trigger')+'()');
+						eval('$scp.'+$(this).attr('damo-trigger')+'(e)');
 					}
 					catch(err) {
 					}
@@ -884,7 +884,6 @@ $scp.$directive.myDirective =  {
 	$scp.$concatenePages = function() {
 		var i;
 		def_concat = new $.Deferred();
-		done = [];
 		cnt = 0;
 		for(i=1;i<$scp.$routing.length;i++) {
 			$('body').append('<div damo-damo="damoPage_'+$scp.$routing[i].url+'"></div>');
