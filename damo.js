@@ -355,6 +355,7 @@ $scp.$directive.myDirective =  {
 
 		for(key in $scp.$directive) {
 			items = scope.find(key);
+//console.log($scp.$directive,items.length,scope.html());
 			if(items.length) {
 				$.get($scp.$directive[key].template, function(data) {
 					for(i=0;i<items.length;i++) {
@@ -370,7 +371,7 @@ $scp.$directive.myDirective =  {
 		
 		setTimeout(function() {
 			def_directive.resolve();
-		},$scp.$config.damperDelay);
+		},$scp.$config.loaderDelay);
 		
 		
 		return def_directive.promise();
@@ -883,18 +884,20 @@ $scp.$directive.myDirective =  {
 	$scp.$concatenePages = function() {
 		var i;
 		def_concat = new $.Deferred();
-		N = $scp.$routing.length;
-		for(i=0;i<$scp.$routing.length-1;i++) {
-			$('body').append('<div damo-damo="damoPage_'+$scp.$routing[i+1].url+'"></div>');
-			$('[damo-damo="damoPage_'+$scp.$routing[i+1].url+'"]').css('display','none');
-			$('[damo-damo="damoPage_'+$scp.$routing[i+1].url+'"]')
-				.load($scp.$routing[i+1].template)
-				.promise()
-				.done(function() {
-					if(i==$scp.$routing.length-2) {
+		done = [];
+		cnt = 0;
+		for(i=1;i<$scp.$routing.length;i++) {
+			$('body').append('<div damo-damo="damoPage_'+$scp.$routing[i].url+'"></div>');
+			$('[damo-damo="damoPage_'+$scp.$routing[i].url+'"]').css('display','none');				
+				$.get($scp.$routing[i].template, function(data) {
+					cnt++;
+					if(cnt==$scp.$routing.length-1) {
 						def_concat.resolve();
 					}
+					$('[damo-damo="damoPage_'+$scp.$routing[cnt].url+'"]').html(data);
+					
 				});
+				setTimeout(function() {},$scp.$config.damperDelay);
 		}
 		if($scp.$routing.length==1) {
 			def_concat.resolve();
