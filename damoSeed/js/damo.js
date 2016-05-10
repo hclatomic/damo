@@ -128,11 +128,10 @@ $scp.$directive.myDirective =  {
 	 * Object for the basic configuration of Damo.
 	 *
 	 * Its members are :<ul>
-	 * <li><span class="mycode">damperDelay</span> : bigger the app, higher it is</li>
-	 * <li><span class="mycode">sliderDelay</span> : delay for hide/show</li>
-	 * <li><span class="mycode">loaderDelay</span> : initial loading delay, bigger the app, higher it is</li>
-	 * <li><span class="mycode">iterationBreak</span> : need to be increased when there are many nested levels of directives and loops</li>
-	 * <li><span class="mycode">directiveDepth</span> : need to be increased when there are many nested levels of directives</li>
+	 * <li><span class="mycode">damperDelay</span> : bigger the app, higher it is (default is 100)</li>
+	 * <li><span class="mycode">sliderDelay</span> : delay for hide/show (default is 200)</li>
+	 * <li><span class="mycode">iterationBreak</span> : need to be increased when there are many nested levels of directives and loops (default is 10)</li>
+	 * <li><span class="mycode">directiveDepth</span> : need to be increased when there are many nested levels of directives (default is 3)</li>
 	 * </ul>
 	 *
 	 * @extend $scp
@@ -141,11 +140,9 @@ $scp.$directive.myDirective =  {
 	$config 	: {		
 	  damperDelay      	: 100,
 	  sliderDelay       : 200,
-	  loaderDelay		: 1000,
 	  iterationBreak 	: 10,
 	  directiveDepth	: 3
 	},
-
 	
 	/** 
 	 *
@@ -201,22 +198,36 @@ $scp.$directive.myDirective =  {
 	/** 
 	 * The jQuery <span class="mycode">change()</span> function is modify to add an update of the
 	 * data model <span class="mycode">$scp.$dm</span>, in order to act when a select,
-	 * input and textarea are changed.
+	 * input and textarea is changed. An update of the view is also called to ensure the two-way data binding.
 	 *
 	 **/
 	jQuery.each(['change'], function( i, name ) {
 		jQuery.fn[ name ] = function( data, fn ) {
 			if(data) {
-				data = new Function (
-					data.toString()
-					.replace(/\}$/," });")
-					.replace(/^function[^{]+{/i,
-						"function$1{"+
-							"$.when("+
-								"$scp.$setObjProperty($scp.$dm,$(this).attr('id'),$(this).val())"+
-							").done(function(){")
-					.replace(/^function[^{]+{/i,"") 
-				);
+
+				str 	= data.toString().replace(/\n/g, '###kk###');
+
+				param 	= str.replace(/^function *\(([^\)]+)\) *\{.*$/i,'$1')
+
+				if(param==str) 	param = false;
+				else 			param = param.replace(/###kk###/g, "\n");
+
+				func 	= str.replace(/^function[^\{]+\{/i,'').replace(/\} *$/g, '').replace(/###kk###/g, "\n");
+
+				str = "\n\
+				$scp.$element = $(this);\
+				$.when(\n\
+					$scp.$setObjProperty($scp.$dm,$(this))\n\
+				).done(function() {\n\
+				"+func+"\
+					$scp.$updateView();\n\
+				}).fail(function() {\n\
+				"+func+"\
+					$scp.$updateView();\n\
+				})\n";
+
+				if(param) data = new Function (param , 'e', str);
+				else data = new Function ('e',str);
 			}
 			return arguments.length > 0 ?
 				this.on( name, null, data, fn) :
@@ -236,100 +247,52 @@ $scp.$directive.myDirective =  {
 	 * @param {string} newValue the new value to set up for the property
 	 * 
 	 */
-	$scp.$setObjProperty = function(obj,path,newValue) {
+	$scp.$setObjProperty = function(dm,elem) {
 		def = $.Deferred();
-
-		var key, newPath, res;
-		if($.isArray(newValue)) return;
-		newValue = String(newValue);
-		if(!obj || !path || !newValue) {
+		if(!dm || !elem) {
 			def.resolve();
 			return def.promise();
 		}
-		var elem = $('[id="'+path+'"]');
+		tag 		= elem.prop('tagName').toLowerCase();
+		path 		= elem.attr('damo-id');
+		val 		= elem.val();
+		type		= elem.prop('type');
+		checked 	= elem.prop('checked');
+		selected 	= elem.find(':selected').val();
 
-		if(elem.prop('tagName').match(/textarea/i)) {
-			newValue = newValue.replace(/\n/, '\\n');
+		if(tag=='textarea') {
+			val = val.replace(/\n/, '\\n');
 		}
 
-		if(elem.attr('type') && elem.attr('type').match(/checkbox/)) {
-			if(elem.is(":checked")) {
-				res = 'true';
-			}
-			else {
-				res = 'false';
-			}
-			try {
-				oldValue = eval('$scp.$dm.'+path);
-				eval('$scp.$dm.'+path+'='+res+';');
-			}
-			catch(err) {
-				try {
-					oldValue = eval('$scp.'+path);
-					eval('$scp.'+path+'='+res+';');
-				}
-				catch(err) {
-				}
-			}
-			if(String(oldValue)!=String(newValue)) {
-				$scp.$updateView();
+		if(tag=='select') { 
+			val = selected;
+		}
+		else if(type=='checkbox') {
+			val = checked;
+		}
+		
+		try {
+			oldValue = eval('$scp.'+path);
+			if(oldValue!='undefined') {
+				eval('$scp.'+path+'="'+val+'";');
 				def.resolve();
 				return def.promise();
 			}
 		}
-		else {
-			if(newValue=='true' || newValue=='false' || newValue=='null' || newValue.match(/^[0-9\.]+$/)) {
-				if(newValue.match(/^[0-9\.]+$/)) 	newValue = parseFloat(newValue);
-				else if(newValue.match(/^[0-9]+$/)) newValue = parseInt(newValue);
-				try {
-					oldValue = eval('$scp.'+path);
-					res = eval('$scp.'+path+'='+newValue+';');
-					if(String(oldValue)!=String(newValue)) {
-						$scp.$updateView();
-						def.resolve();
-						return def.promise();
-					}
-				}
-				catch(err) {
-					try {
-						oldValue = eval('$scp.$dm.'+path);
-						eval('$scp.$dm.'+path+'='+newValue+';');
-						if(String(oldValue)!=String(newValue)) {
-							$scp.$updateView();
-							def.resolve();
-							return def.promise();
-						}
-					}
-					catch(err) {
-					}
-				}
-
-			}
-			else {
-				try {
-					oldValue = eval('$scp.'+path);
-					eval('$scp.'+path+'="'+newValue+'";');
-					if(String(oldValue)!=String(newValue)) {
-						$scp.$updateView();
-						def.resolve();
-						return def.promise();
-					}
-				}
-				catch(err) {
-					try {
-						oldValue = eval('$scp.$dm.'+path);
-						eval('$scp.$dm.'+path+'="'+newValue+'";');
-						if(String(oldValue)!=String(newValue)) {
-							$scp.$updateView();
-								def.resolve();
-								return def.promise();
-							}
-					}
-					catch(err) {
-					}
+		catch(err) {
+			try {
+				oldValue = eval('$scp.$dm.'+path);
+				if(oldValue!='undefined') {
+					eval('$scp.$dm.'+path+'="'+val+'";');
+					def.resolve();
+					return def.promise();
 				}
 			}
-		}
+			catch(err) {
+				def.resolve();
+				return def.promise();
+			}
+		}		
 	};
 
 
@@ -355,7 +318,6 @@ $scp.$directive.myDirective =  {
 
 		for(key in $scp.$directive) {
 			items = scope.find(key);
-//console.log($scp.$directive,items.length,scope.html());
 			if(items.length) {
 				$.get($scp.$directive[key].template, function(data) {
 					for(i=0;i<items.length;i++) {
@@ -371,9 +333,7 @@ $scp.$directive.myDirective =  {
 		
 		setTimeout(function() {
 			def_directive.resolve();
-		},$scp.$config.loaderDelay);
-		
-		
+		},$scp.$config.damperDelay);		
 		return def_directive.promise();
 	};
 
@@ -396,14 +356,13 @@ $scp.$directive.myDirective =  {
 
 		var previous = false;
 			scope.find('[damo-startloop]').each(function() {
-								
+
 				if($(this).is(previous)) {
 					previous = $(this);
 					return true;
 				}
 				else previous = $(this);
 				
-				//if($(this)
 				len 		= parseInt($(this).attr('damo-length'));
 				tag 		= $(this).prop('tagName').toLowerCase();
 				elem 		= $(this);
@@ -415,73 +374,39 @@ $scp.$directive.myDirective =  {
 				if(list) 	diff = list.length-len;
 				else 		diff =0;
 				if(diff) {
-					if(tag=='option') {
-						sel = elem.next();
-						elem2 = sel.children().first();
-						if(diff>0) {	//add
-							if(len===0) {
-								len=1;
-								elem2.show();
-							}
-							for(i=0;i<len-1;i++) {
-								elem2 = elem2.next();
-							}
-							for(i=0;i<diff;i++) {
-								reg = new RegExp($scp.$rxFormat(varName+'.'),'g');
-								str = template.replace(reg, listName+'['+(len+i)+']\.');
-								str = str.replace(/\[\[/g, '\{\{').replace(/\]\]/g, '\}\}');
-								elem2.after(str);
-								elem2 = elem2.next();
-								elem2.removeAttr('damo-startloop').removeAttr('damo-length').show();
-							}
+					if(diff>0) {	//add
+						for(i=0;i<len;i++) {
+							elem = elem.next();
 						}
-						else {			//remove
-							diff = -diff;
-							sel = elem.next();
-							elem2 = sel.children().first();
-							for(i=0;i<len-1;i++) {
-								elem2 = elem2.next();
-							}
-							for(i=0;i<diff;i++) {
-								inter = elem2.prev();
-								elem2.remove();
-								elem2 = inter;
-							}
-						}		
+						for(i=0;i<diff;i++) {
+							reg = new RegExp($scp.$rxFormat(varName+'.'),'g');
+							str = template.replace(reg, listName+'['+(len+i)+']\.');
+							str = str.replace(/\[\[/g, '\{\{').replace(/\]\]/g, '\}\}');
+							elem.after(str);
+							elem = elem.next();
+							elem.removeAttr('damo-startloop').removeAttr('damo-length').show();
+						}
 					}
-					else {
-						if(diff>0) {	//add
-							for(i=0;i<len;i++) {
-								elem = elem.next();
-							}
-							for(i=0;i<diff;i++) {
-								reg = new RegExp($scp.$rxFormat(varName+'.'),'g');
-								str = template.replace(reg, listName+'['+(len+i)+']\.');
-								str = str.replace(/\[\[/g, '\{\{').replace(/\]\]/g, '\}\}');
-								elem.after(str);
-								elem = elem.next();
-								elem.removeAttr('damo-startloop').removeAttr('damo-length').show();
-							}
-						}
-						else {			//remove
+					else {			//remove
 
-							diff = -diff;
-							elem 	= $(this);
-							for(i=0;i<len;i++) {
-								elem = elem.next();
-							}
-							for(i=0;i<diff;i++) {
-								inter = elem.prev();
-								elem.remove();
-								elem = inter;
-							}
+						diff = -diff;
+						elem 	= $(this);
+						for(i=0;i<len;i++) {
+							elem = elem.next();
+						}
+						for(i=0;i<diff;i++) {
+							inter = elem.prev();
+							elem.remove();
+							elem = inter;
 						}
 					}
 					$(this).attr('damo-length', list.length);
 				}
+			}).promise().done(function() {
+				$scp.$setTriggers();
+			def_updateloop.resolve();
 			});
 		}
-		def_updateloop.resolve();
 		return def_updateloop.promise();
 	};
 
@@ -489,7 +414,7 @@ $scp.$directive.myDirective =  {
 	
 	/** 
 	 *
-	 * Seek for the value of a property in the data model
+	 * Seek for the value of a property in the scope <span class="mycode">$scp</span> and in the data model
 	 * <span class="mycode">$scp.$dm</span>, filtered if necessary.
 	 *
 	 * @extend $scp
@@ -500,7 +425,7 @@ $scp.$directive.myDirective =  {
 	 * 
 	 */
 	$scp.$seekData = function(filter,param) {
-		val = false;
+		var val;
 		if(filter) {
 			try {
 				val = eval('$scp.$filter.'+filter+'($scp.'+param+')');
@@ -542,25 +467,6 @@ $scp.$directive.myDirective =  {
 		return val;
 	};
 	
-	/** 
-	 *
-	 * Function used during the build of the first view. It launches
-	 * <span class="mycode">$scp.$setDmValues(true)</span> that will
-	 * set the values of the html tags with the values of the data model,
-	 * but also ("true" argument) set up the two-way binding for the
-	 * input, select and text area.
-	 * 
-	 * @extend $scp
-	 * 
-	 */	
-	$scp.$buildDmValues = function() {
-		def = $.Deferred();
-		$.when($scp.$setDmValues(true)).done(function() {		
-			def.resolve();
-		});
-		return def.promise();	
-	};
-
 	
 	/** 
 	 *
@@ -574,7 +480,7 @@ $scp.$directive.myDirective =  {
 	 * @extend $scp
 	 * 
 	 */
-	$scp.$setDmValues = function(withChange) {
+	$scp.$setDmValues = function() {
 		def = $.Deferred();
 		scope = $('body');
 
@@ -591,51 +497,42 @@ $scp.$directive.myDirective =  {
 			});
 		}
 
-		//treat id="param" _____________________________________________
-		scope.find('[id]').each(function() {
+		//treat damo-id="param" _____________________________________________
+		scope.find('[damo-id]').each(function() {
+
 			tag = $(this).prop('tagName').toLowerCase();
 			type = $(this).prop('type') ? $(this).prop('type').toLowerCase() : false;
 			filter = $(this).attr('damo-filter');
-			val = $scp.$seekData(filter,$(this).attr('id'));
+			val = $scp.$seekData(filter||null,$(this).attr('damo-id'));
 
-
-			if(typeof val != 'object' &&  String(val)!='undefined') {
+			if(typeof val != 'object' && val!='undefined') {
 				val = String(val);
 				if(tag=='select') {
-					if(withChange) {
-						$(this).change(function() {}); //option:first
-						if(String($(this).val())!='null') $(this).val(val);
-						else $(this).val($(this).find('option').first().val());
-					}
-					else {
-						if(String($(this).val())!='null') $(this).val(val);
-						else $(this).val($(this).find('option').first().val());
-					}
+					if(String($(this).val())!='null') $(this).val(val);
+					else $(this).val($(this).find('option').first().val());
 				}
 				
 				else if(tag=='input' && type=='radio') {
-					$(this).filter('[value="'+val+'"]').attr('checked', true);
-					if(withChange) $(this).change(function() {});
+
+					if($(this).val()==val) {
+						$('[damo-id="'+$(this).attr('damo-id')+'"]').prop('checked',false);
+						$('[damo-id="'+$(this).attr('damo-id')+'"][value="'+val+'"]').prop('checked', true);
+					}
 				}
 				else if(tag=='input' && type=='checkbox') {
-					scope.find('input[id="'+$(this).attr('id')+'"][type="checkbox"]').each(function() {
-						if(val=='true'||val=='0') {
-							$(this).attr('checked', true);
-						}
-						else {
-							$(this).attr('checked', false);
-						}
-						if(withChange) $(this).change(function() {});
-					});
+					if(val=='true'||val=='1') {
+						$(this).prop('checked', true);
+					}
+					else if(val=='false'||val=='0') {
+						$(this).prop('checked',false);
+					}
 				}
 				else if(tag=='input'||tag=='textarea') {
 					$(this).val(val);
-					if(withChange) $(this).change(function() {});
 				}
 				else {
 					$(this).html(val);
 				}
-				
 			}
 		}).promise().done(function() {
 			def.resolve();
@@ -745,10 +642,10 @@ $scp.$directive.myDirective =  {
 				for(key in $scp.$dm) break;
 				var arr = [];
 				$('[damo-form="'+$(this).attr('damo-submitform')+'"]')
-				.find('[id]:visible')
+				.find('input[id]:visible,select[id]:visible,textarea[id]:visible,[damo-id]:visible')
 				.each(function() {
 					arr.push({
-						item : $(this).attr('id'),
+						item : $(this).attr('id') || $(this).attr('damo-id'),
 						value : $(this).val()
 					});
 				});
@@ -760,17 +657,25 @@ $scp.$directive.myDirective =  {
 				}
 			}) ;
 		}).promise().done(function() {
-			scope.find('[damo-trigger]').each(function() {
-				$(this).click(function(e) {
-					try {
-						eval('$scp.'+$(this).attr('damo-trigger')+'(e)');
-					}
-					catch(err) {
-					}
-				}) ;
-			}).promise().done(function() {
+			$scp.$setTriggers().done(function() {
 				def.resolve();
 			});
+		});
+		return def.promise();
+	};
+	$scp.$setTriggers = function() {
+		def = new $.Deferred();
+		scope.find('[damo-trigger]').each(function() {
+			$(this).unbind('click');
+			$(this).click(function(e) {
+				try {
+					eval('$scp.'+$(this).attr('damo-trigger')+'(e)');
+				}
+				catch(err) {
+				}
+			}) ;
+		}).promise().done(function() {
+			def.resolve();
 		});
 		return def.promise();
 	};
@@ -786,6 +691,7 @@ $scp.$directive.myDirective =  {
 	 * 
 	 * @extend $scp
 	**/
+				
 	$scp.$Damo = function(obj,prog) {
 		$( document ).ready(function() {
 			def_Damo = new $.Deferred();
@@ -804,7 +710,7 @@ $scp.$directive.myDirective =  {
 
 			
 			
-			setTimeout(function() {
+			//setTimeout(function() {
 				var i,found,index;
 				
 				//feed afterLoading ______________________________________________
@@ -849,26 +755,39 @@ $scp.$directive.myDirective =  {
 					}
 				}
 				$scp.$route.current = $scp.$routing[0].url;
-				$('[damo-damo="'+$scp.$route.current+'"]').attr('damo-damo','damoPage_'+$scp.$route.current);
+				$('[damo-damo="'+$scp.$route.current+'"]').attr('damo-damo',''+$scp.$route.current);
+
 
 				$scp.$concatenePages().done(function() {
-					$scp.$buildDirectives().done(function() {
-						$scp.$buildLoops().done(function() {
-							$scp.$buildDmValues(true).done(function() {
-								$scp.$setConditions().done(function() {
-									$scp.$buildForms().done(function() {
-										$scp.$afterLoading()
-										setTimeout(function() {
-											def_Damo.resolve();
-										},$scp.$config.damperDelay);
-										
-									});
+					setTimeout(function() {
+						$scp.$buildDirectives().done(function() {
+							setTimeout(function() {
+								$scp.$buildLoops().done(function() {
+									setTimeout(function() {
+										$scp.$setDmValues().done(function() {
+											setTimeout(function() {
+												$scp.$setConditions().done(function() {
+													setTimeout(function() {
+														$scp.$buildForms().done(function() {
+															setTimeout(function() {
+																$scp.$afterLoading();
+																setTimeout(function() {
+																	$('[damo-id]').change(function() {});
+																	def_Damo.resolve();
+																},$scp.$config.damperDelay);
+															},$scp.$config.damperDelay);
+														});
+													},$scp.$config.damperDelay);
+												});
+											},$scp.$config.damperDelay);
+											
+										});
+									},$scp.$config.damperDelay);
 								});
-							});
+							},$scp.$config.damperDelay);
 						});
-					});
+					},$scp.$config.damperDelay);
 				});
-			},$scp.$config.loaderDelay);
 			return def_Damo.promise();
 		});
 	};
@@ -886,14 +805,14 @@ $scp.$directive.myDirective =  {
 		def_concat = new $.Deferred();
 		cnt = 0;
 		for(i=1;i<$scp.$routing.length;i++) {
-			$('body').append('<div damo-damo="damoPage_'+$scp.$routing[i].url+'"></div>');
-			$('[damo-damo="damoPage_'+$scp.$routing[i].url+'"]').css('display','none');				
+			$('body').append('<div damo-damo="'+$scp.$routing[i].url+'"></div>');
+			$('[damo-damo="'+$scp.$routing[i].url+'"]').css('display','none');				
 				$.get($scp.$routing[i].template, function(data) {
 					cnt++;
 					if(cnt==$scp.$routing.length-1) {
 						def_concat.resolve();
 					}
-					$('[damo-damo="damoPage_'+$scp.$routing[cnt].url+'"]').html(data);
+					$('[damo-damo="'+$scp.$routing[cnt].url+'"]').html(data);
 					
 				});
 				setTimeout(function() {},$scp.$config.damperDelay);
@@ -906,7 +825,9 @@ $scp.$directive.myDirective =  {
 	
 	/** 
 	 *
-	 * Function that build the html loops from the given template.
+	 * Function that build the html loops from the given template. The idea is to setup a hidden
+	 * tag describing the the loop, with the attribute <span class="mycode">damo-startloop</span>.
+	 * Each time the loop has to be reviewed, this tag is compared with the current status of the loop.
 	 *
 	 * @extend $scp
 	 * 
@@ -977,6 +898,7 @@ $scp.$directive.myDirective =  {
 				k++;
 				if(k>$scp.$config.iterationBreak) break;
 			}
+
 		}
 		return def_loop.promise();
 
@@ -1055,12 +977,12 @@ $scp.$directive.myDirective =  {
 $( document ).ready(function() {
 	$(window).on('popstate', function(e) {
 		var page = String(window.location.href).replace(/.*#(.*)$/, '$1');
-		if($('[damo-damo="damoPage_'+page+'"]').length) {
+		if($('[damo-damo="'+page+'"]').length) {
 			$scp.$route.last 	= $scp.$route.current;
 			$scp.$route.current = page;
-			$('[damo-damo="damoPage_'+$scp.$route.last+'"]').hide();
+			$('[damo-damo="'+$scp.$route.last+'"]').hide();
 			$scp.$updateView();
-			$('[damo-damo="damoPage_'+$scp.$route.current+'"]').show();
+			$('[damo-damo="'+$scp.$route.current+'"]').show();
 		}
 	});
 
@@ -1077,22 +999,22 @@ $( document ).ready(function() {
 		var baseUrl = window.location.href.replace(/#.*$/,'');
 		for(i=0;i<$scp.$routing.length;i++) {
 			if($scp.$routing[i].url===page) {		
-				if(!$('[damo-damo="damoPage_'+page+'"]').length) {
+				if(!$('[damo-damo="'+page+'"]').length) {
 					window.location.href = baseUrl+'#'+$scp.$routing[i].url;					
-					$('body').append('<div damo-damo="damoPage_'+page+'"></div>');
+					$('body').append('<div damo-damo="'+page+'"></div>');
 					$scp.$route.last 	= $scp.$route.current;
 					$scp.$route.current = $scp.$routing[i].url;
-					$('[damo-damo="damoPage_'+$scp.$route.last+'"]').hide();
-					$('[damo-damo="damoPage_'+$scp.$route.current+'"]').load($scp.$routing[i].template);
-					$('[damo-damo="damoPage_'+$scp.$route.current+'"]').show();
+					$('[damo-damo="'+$scp.$route.last+'"]').hide();
+					$('[damo-damo="'+$scp.$route.current+'"]').load($scp.$routing[i].template);
+					$('[damo-damo="'+$scp.$route.current+'"]').show();
 				}
 				else {
 					window.location.href = baseUrl+'#'+$scp.$routing[i].url;
 					setTimeout(function() {
 						$scp.$updateView();
 					},$scp.$config.damperDelay);
-					$('[damo-damo="damoPage_'+$scp.$route.last+'"]').hide();
-					$('[damo-damo="damoPage_'+$scp.$route.current+'"]').show();
+					$('[damo-damo="'+$scp.$route.last+'"]').hide();
+					$('[damo-damo="'+$scp.$route.current+'"]').show();
 				}
 				break;
 					
