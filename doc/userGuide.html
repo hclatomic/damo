@@ -110,6 +110,7 @@
 				<a href="#htmltemplate" style="font-weight:bold;font-style:italic">Html Templates :</a><br>
 				<a href="#damo-gen">Basics</a><br>
 				<a href="#damo-damo">damo-damo</a><br>
+				<a href="#damo-id">damo-id</a><br>
 				<a href="#damo-filter">damo-filter</a><br>
 				<a href="#damo-form">damo-form</a><br>
 				<a href="#damo-loop">damo-loop</a><br>
@@ -223,12 +224,10 @@ $scp.$updateView();</pre>
 
     $('input[id$="price"]').change(function() {
       console.log('-->change promotion price');
-      $scp.$updateView();
     });
     $('select[id$="promotion"]').change(function() {
       console.log('-->change promotion status');
       $scp.promotion = setPromo($scp.$dm.books);
-      $scp.$updateView();
     });
   });
 </pre>
@@ -236,8 +235,8 @@ $scp.$updateView();</pre>
     <a name="displaydm"></a>
     <h5>Display the data model</h5>
     <p>
-    The tags of the html template are connected to the applicative data model, and the variables of the scope,  by their ids :</p>
- 	<pre class="prettyprint code" style="width:100%;border:1px solid #ccc"><<i>tagName</i> id="<i>dataModelPropertyName</i>"></pre>
+    The tags of the html template are connected to the applicative data model, and the variables of the scope,  by their attribute <span class="mycode">damo-id</span>. All tags having this attribute will be watch for the two-way data binding, others will be ignored.</p>
+ 	<pre class="prettyprint code" style="width:100%;border:1px solid #ccc"><<i>tagName</i> damo-id="<i>dataModelPropertyName</i>"></pre>
 
      <p>In these expressions <span class="mycode"><i>dataModelPropertyName</i></span> is of type : <span class="mycode">books[4].buyer[6].name</span> and is the counterpart of the property <span class="mycode">$scp.$dm.books[4].buyer[6].name</span> of the datamodel.
      </p>
@@ -245,10 +244,10 @@ $scp.$updateView();</pre>
 	<p>There is however an exception for the <b>option</b> tag. Indeed This tag can not include any html tag, but just text. So we can not use something like this :</p>
 	<pre class="prettyprint code">
 //bad way of settig up an option
-&lt;option value="books[4].buyer[6].name"&gt;&lt;span id="books[4].buyer[6].name"&gt;&lt;/span&gt;&lt;/option&gt;</pre>
+&lt;option value="books[4].buyer[6].name"&gt;&lt;span damo-id="books[4].buyer[6].name"&gt;&lt;/span&gt;&lt;/option&gt;</pre>
 <p>In this case we use the <span class="mycode">{{...}}</span> pattern like this :</p>
 	<pre class="prettyprint code">
-//bad way of settig up an option
+//good way of settig up an option
 &lt;option value="books[4].buyer[6].name"&gt;{{books[4].buyer[6].name}}&lt;/option&gt;</pre>
 
      
@@ -293,15 +292,11 @@ $scp.$updateView();</pre>
 	
     <a name="filters"></a>
    <h5>Filters</h5>
-    <p>The values of the data model, and the variables of the scope, can be first filtered before being displayed. This is made by two ways :
-    <ul style="">
-		<li>
-			by their ids :<pre class="prettyprint code"><<i>tagName</i> id="<i>dataModelPropertyName</i>" damo-filter="<i>filterName</i>"></pre>
-		</li>
-		<li>
-			by the connector expression  :<pre class="prettyprint code">{{<i>dataModelPropertyName</i> | <i>filterName</i>}}</pre>
-		</li>
-     </ul>
+    <p>The values of the data model, and the variables of the scope, can be first filtered before being displayed. This is made this ways :</p>
+<pre class="prettyprint code"><<i>tagName</i> id="<i>dataModelPropertyName</i>" damo-filter="<i>filterName</i>"></pre>
+<p>However this is not possible inside an option tag, which requires only text as content, therefore in this unique case the filter must be specified like this :</p>
+<pre class="prettyprint code">
+&lt;option value="<i>whatever</i>"&gt;{{<i>dataModelPropertyName</i> | <i>filterName</i>}}&lt;/option&gt;</pre>
      <p>In these expressions <span class="mycode"><i>filterName</i></span> is the name of the function that will be used to filter the value, i.e. <span class="mycode">$scp.$filter.filterName()</span>.<br>
      The filters can only be a method of the object <span class="mycode">$scp.$filter</span>, it can be coded inside the main script or included in a javascript file in the header of the index.html. Example :</p>
      <pre class="prettyprint code">
@@ -340,7 +335,7 @@ $scp.$routing = [
 $scp.myTriggerFunction = function() {
     console.log($scp.$submitData);
 };</pre>
-<p>Note that the click() trigger of the damo-formsubmit tag can not be modified, all the needed actions must be included to the damo-submitform function.</p>
+<p>Note that the click() trigger of the damo-formsubmit tag can not be modified, all the needed actions must be included to the damo-submitform function.<br><br> Also note that all visible tags having an id, or an attribute <span class="mycode">damo-id</span>, will be catched in <span class="mycode">$scp.$submitData</span>.</p>
 
     <a name="directives"></a>
     <h5>Directives</h5>
@@ -358,6 +353,22 @@ $scp.$directive = {
   },
   ...
 }</pre>
+
+
+    <a name="tuning"></a>
+    <h5>Tuning</h5>
+	<p>Damo can be tuned with regards to the type of the application. A larger app will require more time to load, a complex template with multi nested directives, will require a deeper survey, etc. The configuration member of Damo  <span class="mycode">$scp.$config</span> is intended for these purpose. Here is the default object :</p>
+<pre class="prettyprint code">
+$scp.$config 	= {		
+    damperDelay    : 100,
+    sliderDelay    : 200,
+    loaderDelay    : 1000,
+    iterationBreak : 10,
+    directiveDepth : 3
+}
+</pre>
+	<p>These configuration can be overriden BEFORE calling <span class="mycode">$scp.$Damo</span></p>
+
 
      <a name="syntax"></a>
    <h2 style="margin-top:40px">Syntax</h2>
@@ -396,9 +407,20 @@ or for option tags :
 			</td>
 		</tr>
   		<tr>
+			<td class="word">id<a name="damo-id"></a></td>
+			<td>
+				<pre class="prettyprint code noma">&lt;<i>tagName</i> damo-id="<i>varId</i>"&gt;
+...
+&lt;/<i>tagName</i>&gt;</pre>
+			</td>
+			<td>
+				Each tag having the attribute <span class="mycode">damo-id</span> will be watch for the two-way data binding.
+			</td>
+		</tr>
+  		<tr>
 			<td class="word">filter<a name="damo-filter"></a></td>
 			<td>
-				<pre class="prettyprint code noma">&lt;<i>tagName</i> id="<i>varId</i>" damo-filter="<i>filterName</i>"&gt;
+				<pre class="prettyprint code noma">&lt;<i>tagName</i> damo-id="<i>varId</i>" damo-filter="<i>filterName</i>"&gt;
 ...
 &lt;<i>/tagName</i>&gt;</pre>
 or for option tags :
@@ -610,7 +632,7 @@ $scp.$directive = {
     <h5 class="tdm"><a href="damoSeed.zip">Download Example</a></h5>
     <h5 class="tdm"><a href="userGuide.html">User Guide</a></h5>
     <h5 class="tdm"><a href="$scp.html">Source doc</a></h5>
-    <h5 class="tdm"><a href="">GitHub</a></h5>
+    <h5 class="tdm"><a href="https://github.com/hclatomic/damo">GitHub</a></h5>
 <ul>
 	<hr style="height: 1px;margin: 20px;padding: 0;background-color: #ccc;border: 0;">
     <li style="margin:20px;font-size:14px;font-weight:bold;color:#888"><i>"Although Damo is based on <a href="https://jquery.com/" style="color:#0095dd">JQuery</a>, and 100% compatible, it provides the advantages of <a href="https://angularjs.org/" style="color:#0095dd">Angular.js</a>, without the boring aspects, and much simply"</i></li>

@@ -139,11 +139,10 @@ $scp.myAwsomeFunction = function() {
     Object for the basic configuration of Damo.
 
 Its members are :<ul>
-<li><span class="mycode">damperDelay</span> : bigger the app, higher it is</li>
-<li><span class="mycode">sliderDelay</span> : delay for hide/show</li>
-<li><span class="mycode">loaderDelay</span> : initial loading delay, bigger the app, higher it is</li>
-<li><span class="mycode">iterationBreak</span> : need to be increased when there are many nested levels of directives and loops</li>
-<li><span class="mycode">DirectiveDepth</span> : need to be increased when there are many nested levels of directives</li>
+<li><span class="mycode">damperDelay</span> : bigger the app, higher it is (default is 100)</li>
+<li><span class="mycode">sliderDelay</span> : delay for hide/show (default is 200)</li>
+<li><span class="mycode">iterationBreak</span> : need to be increased when there are many nested levels of directives and loops (default is 10)</li>
+<li><span class="mycode">directiveDepth</span> : need to be increased when there are many nested levels of directives (default is 3)</li>
 </ul>
 </div>
 
@@ -186,7 +185,7 @@ Its members are :<ul>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="damo.js.html">damo.js</a>, <a href="damo.js.html#line141">line 141</a>
+        <a href="damo.js.html">damo.js</a>, <a href="damo.js.html#line140">line 140</a>
     </li></ul></dd>
     
 
@@ -359,7 +358,7 @@ $scp.$dm = myJsonDataModel;</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="damo.js.html">damo.js</a>, <a href="damo.js.html#line187">line 187</a>
+        <a href="damo.js.html">damo.js</a>, <a href="damo.js.html#line184">line 184</a>
     </li></ul></dd>
     
 
@@ -672,7 +671,7 @@ is a function that returns the result of the filtering.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="damo.js.html">damo.js</a>, <a href="damo.js.html#line1008">line 1008</a>
+        <a href="damo.js.html">damo.js</a>, <a href="damo.js.html#line941">line 941</a>
     </li></ul></dd>
     
 
@@ -804,93 +803,7 @@ This is a jquery object.</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="damo.js.html">damo.js</a>, <a href="damo.js.html#line345">line 345</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-        
-            
-
-    
-<hr>
-    <h4 class="name" id=".$buildDmValues"><span class="type-signature">(static) </span>$buildDmValues<span class="signature">()</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Function used during the build of the first view. It launches
-<span class="mycode">$scp.$setDmValues(true)</span> that will
-set the values of the html tags with the values of the data model,
-but also ("true" argument) set up the two-way binding for the
-input, select and text area.
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="damo.js.html">damo.js</a>, <a href="damo.js.html#line555">line 555</a>
+        <a href="damo.js.html">damo.js</a>, <a href="damo.js.html#line308">line 308</a>
     </li></ul></dd>
     
 
@@ -1000,7 +913,7 @@ $scp.myFormSubmit = function() {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="damo.js.html">damo.js</a>, <a href="damo.js.html#line739">line 739</a>
+        <a href="damo.js.html">damo.js</a>, <a href="damo.js.html#line636">line 636</a>
     </li></ul></dd>
     
 
@@ -1024,7 +937,9 @@ $scp.myFormSubmit = function() {
 
 
 <div class="description">
-    Function that build the html loops from the given template.
+    Function that build the html loops from the given template. The idea is to setup a hidden
+tag describing the the loop, with the attribute <span class="mycode">damo-startloop</span>.
+Each time the loop has to be reviewed, this tag is compared with the current status of the loop.
 </div>
 
 
@@ -1082,7 +997,7 @@ $scp.myFormSubmit = function() {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="damo.js.html">damo.js</a>, <a href="damo.js.html#line903">line 903</a>
+        <a href="damo.js.html">damo.js</a>, <a href="damo.js.html#line835">line 835</a>
     </li></ul></dd>
     
 
@@ -1214,7 +1129,7 @@ to be loaded</td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="damo.js.html">damo.js</a>, <a href="damo.js.html#line1064">line 1064</a>
+        <a href="damo.js.html">damo.js</a>, <a href="damo.js.html#line997">line 997</a>
     </li></ul></dd>
     
 
@@ -1298,7 +1213,7 @@ document.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="damo.js.html">damo.js</a>, <a href="damo.js.html#line873">line 873</a>
+        <a href="damo.js.html">damo.js</a>, <a href="damo.js.html#line803">line 803</a>
     </li></ul></dd>
     
 
@@ -1315,7 +1230,7 @@ document.
 
     
 <hr>
-    <h4 class="name" id=".$Damo"><span class="type-signature">(static) </span>$Damo<span class="signature">(obj[, prog])</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".$Damo"><span class="type-signature">(static) </span>$Damo<span class="signature">(obj, prog)</span><span class="type-signature"></span></h4>
 
     
 
@@ -1402,7 +1317,7 @@ after the first load of the application.
 
             
 
-            <td class="description last">(optional) is the script that shall apply to the view once loaded</td>
+            <td class="description last">is the script that shall apply to the view once loaded</td>
         </tr>
 
     
@@ -1457,7 +1372,7 @@ after the first load of the application.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="damo.js.html">damo.js</a>, <a href="damo.js.html#line789">line 789</a>
+        <a href="damo.js.html">damo.js</a>, <a href="damo.js.html#line695">line 695</a>
     </li></ul></dd>
     
 
@@ -1610,7 +1525,7 @@ after the first load of the application.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="damo.js.html">damo.js</a>, <a href="damo.js.html#line1020">line 1020</a>
+        <a href="damo.js.html">damo.js</a>, <a href="damo.js.html#line953">line 953</a>
     </li></ul></dd>
     
 
@@ -1634,7 +1549,7 @@ after the first load of the application.
 
 
 <div class="description">
-    Seek for the value of a property in the data model
+    Seek for the value of a property in the scope <span class="mycode">$scp</span> and in the data model
 <span class="mycode">$scp.$dm</span>, filtered if necessary.
 </div>
 
@@ -1788,7 +1703,7 @@ after the first load of the application.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="damo.js.html">damo.js</a>, <a href="damo.js.html#line501">line 501</a>
+        <a href="damo.js.html">damo.js</a>, <a href="damo.js.html#line427">line 427</a>
     </li></ul></dd>
     
 
@@ -1879,7 +1794,7 @@ tag on the html view.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="damo.js.html">damo.js</a>, <a href="damo.js.html#line660">line 660</a>
+        <a href="damo.js.html">damo.js</a>, <a href="damo.js.html#line557">line 557</a>
     </li></ul></dd>
     
 
@@ -1968,7 +1883,7 @@ The tag's ids must be the the json path of the concerned property :
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="damo.js.html">damo.js</a>, <a href="damo.js.html#line576">line 576</a>
+        <a href="damo.js.html">damo.js</a>, <a href="damo.js.html#line483">line 483</a>
     </li></ul></dd>
     
 
@@ -2145,7 +2060,7 @@ The tag's ids must be the the json path of the concerned property :
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="damo.js.html">damo.js</a>, <a href="damo.js.html#line239">line 239</a>
+        <a href="damo.js.html">damo.js</a>, <a href="damo.js.html#line250">line 250</a>
     </li></ul></dd>
     
 
@@ -2229,7 +2144,7 @@ loop with the correct elements of the array.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="damo.js.html">damo.js</a>, <a href="damo.js.html#line389">line 389</a>
+        <a href="damo.js.html">damo.js</a>, <a href="damo.js.html#line350">line 350</a>
     </li></ul></dd>
     
 
@@ -2314,7 +2229,7 @@ checking that could call it.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="damo.js.html">damo.js</a>, <a href="damo.js.html#line985">line 985</a>
+        <a href="damo.js.html">damo.js</a>, <a href="damo.js.html#line918">line 918</a>
     </li></ul></dd>
     
 
@@ -2353,7 +2268,7 @@ checking that could call it.
     <h5><a href="damoSeed.zip">Download Example</a></h5>
     <h5><a href="userGuide.html">User Guide</a></h5>
     <h5><a href="$scp.html">Source doc</a></h5>
-    <h5><a href="">GitHub</a></h5>
+    <h5><a href="https://github.com/hclatomic/damo">GitHub</a></h5>
 <ul>
 	<hr style="height: 1px;margin: 20px;padding: 0;background-color: #ccc;border: 0;">
     <li style="margin:20px;font-size:14px;font-weight:bold;color:#888"><i>"Although Damo is based on <a href="https://jquery.com/" style="color:#0095dd">JQuery</a>, and 100% compatible, it provides the advantages of <a href="https://angularjs.org/" style="color:#0095dd">Angular.js</a>, without the boring aspects, and much simply"</i></li>
