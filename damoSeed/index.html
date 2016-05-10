@@ -20,7 +20,8 @@
 			<h3>Damo Seed</h3>
 			<div style="padding-bottom:10px;">
 				<div class="nav">
-					<span id="user.firstname"></span> <span id="user.familyname"></span> /
+					<b><span damo-id="user.firstname"></span> <span damo-id="user.familyname"></span></b>
+					<span style="margin-right:50px;"></span>
 					Go to pages :
 					<a href="javascript:{$scp.$changePage('/infos')}">Infos</a>
 					<a href="javascript:{$scp.$changePage('/table')}">Table</a>
@@ -30,7 +31,7 @@
 		</div>
 		<div damo-damo="/">
 			<div class="comment">
-				<textarea id="myComment" style="vertical-align:middle"></textarea> <span id="myComment" class="phrase"></span>
+				<textarea damo-id="myComment" style="vertical-align:middle"></textarea><span damo-id="myComment" class="phrase"></span>
 			</div>
 			<div class="list">
 				<h2 class="title">List <button damo-trigger="toggleList">Toggle</button></h2>
@@ -44,16 +45,16 @@
 							<th>Buyers</th>
 						</tr>
 						<tr damo-loop="book in books">
-							<td><span id="book.title"></span></td>
+							<td><span damo-id="book.title"></span></td>
 							<td>
-								<select id="book.promotion">
+								<select damo-id="book.promotion">
 									<option value="true">true</option>
 									<option value="false">false</option>
 								</select>
 							</td>
-							<td><input id="book.price"> &euro;</td>
+							<td><input damo-id="book.price"> &euro;</td>
 							<td>
-								<select id="book.buyers">
+								<select damo-id="book.buyers">
 									<option damo-loop="one in book.buyers" value="{{one.name}}">
 										{{one.name}} and {{one.date}}
 									</option>

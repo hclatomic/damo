@@ -1,6 +1,10 @@
 {
 	"name" 		: "My Library",
 	"address" 	: "27 rue des Alouettes, Paris",
+	"user"		: {
+		"firstname" : "Anonymous",
+		"familyname" : "Visitor"
+	},
 	"books" 	: [
 		{
 			"title" 		: "Moby Dick",
@@ -63,7 +67,7 @@
 			"author" 		: "Agnès Rosenstiehl",
 			"pages" 		: 216,
 			"price" 		: 42.7,
-			"inStock" 	: true,
+			"inStock" 	: false,
 			"promotion" 	: true,
 			"publics" 	: {
 				"kids" 	: true,
