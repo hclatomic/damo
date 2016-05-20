@@ -342,7 +342,7 @@ $scp.myTriggerFunction = function() {
  <p>A directive is a non standard html tag that stands for an entire template. The directives might be included in the main index.html, with one or many files, respecting the <span class="mycode">$scp.$directive</span> object format. This template shall have its own data model, i.e. all the ids of the elements must refer to a root object, called <span class="mycode">seed</span>. This seed enables to connect with the main datamodel <span class="mycode">$scp.$dm</span>, by yhe mean of the current template. For instance :</p>
 <pre class="prettyprint code">
 &lt;div damo-loop="item in books"&gt;
-  &lt;myShop damo-seed="item"&gt;&lt;/shop&gt;
+  &lt;myShop damo-seed="item"&gt;&lt;/myShop&gt;
 &lt;/div&gt;</pre>
 	<p>To make a directive available, it shall be a member of the <span class="mycode">$scp.$directive</span> object with the following format :</p>
 				<pre class="prettyprint code">
