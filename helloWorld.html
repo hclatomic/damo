@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Damo mini</title>
+		<title>Damo Hello World</title>
 		<meta charset="utf-8">		
 		<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-		<script src="damo.js"></script>
+		<script src="v2/js/damo.v2.js"></script>
 		<script>
-			$scp.$Damo({ myText : 'Hello World !' });
+			damo.dm.myText = "Hello World !";
 		</script>		
 	</head>
 	<body>
-		<div id="myText"></div>
+		<div damo-id="myText"></div>
 	</body>
 </html>
+
 
