@@ -48,8 +48,8 @@ Here is the minimum code to display "Hello World !" :
 	<head>
 		<title>Damo Hello World</title>
 		<meta charset="utf-8">		
-		<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-		<script src="v2/js/damo.v2.js"></script>
+		<script src="jquery.js"></script>
+		<script src="damo.js"></script>
 		<script>
 			damo.dm.myText = "Hello World !";
 		</script>		
