@@ -43,7 +43,6 @@ Damo's is made simple to reduce the complexity of the application as much as pos
 
 Here is the minimum code to display "Hello World !" :
 
-    
 <!DOCTYPE html>
 <html>
 	<head>
@@ -59,7 +58,6 @@ Here is the minimum code to display "Hello World !" :
 		<div damo-id="myText"></div>
 	</body>
 </html>
-
 
 A more sofisticated example is provided by the damoSeed example, that you can download from the [home page][0], as well as getting the source doc and the user guide. 
 
