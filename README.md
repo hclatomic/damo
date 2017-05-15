@@ -43,21 +43,22 @@ Damo's is made simple to reduce the complexity of the application as much as pos
 
 Here is the minimum code to display "Hello World !" :
 
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>Damo Hello World</title>
-		<meta charset="utf-8">		
-		<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-		<script src="v2/js/damo.v2.js"></script>
-		<script>
-			damo.dm.myText = "Hello World !";
-		</script>		
-	</head>
-	<body>
-		<div damo-id="myText"></div>
-	</body>
-</html>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;Damo Hello World&lt;/title&gt;
+    &lt;meta charset="utf-8"&gt;    
+    &lt;script src="http://code.jquery.com/jquery-1.10.2.js"&gt;&lt;/script&gt;
+    &lt;script src="damo.min.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+      damo.dm.myText = "Hello World !";
+    &lt;/script&gt;    
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div damo-id="myText"&gt;&lt;/div&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+
 
 A more sofisticated example is provided by the damoSeed example, that you can download from the [home page][0], as well as getting the source doc and the user guide. 
 
