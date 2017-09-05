@@ -1,8 +1,8 @@
 /*!
- * Damo JavaScript Library v2
+ * Damo JavaScript Library v0.0.1
  * http://www.oceanvirtuel.com/damo
  * Author Herve Le Cornec, hcl@oceanvirtuel.com
- * Copyright 2017 Herve Le Cornec
+ * Copyright 2016 Herve Le Cornec
  * Released under the GPL license
  * http://www.gnu.org/licenses/gpl.html
  *
@@ -13,6 +13,7 @@
  *
  * Date: Sat, 01 May 2017 01:11:54 +0200
  */
+
 
 //Damo's structure _____________________________________________________
 /** 
@@ -422,6 +423,7 @@ damoGo = function(page) {
 				}
 				catch(err) {
 				}
+		
 				damo.method.setLang($('damo-page[url="'+page+'"]'));
 				if(window.location.href!==newHref) {
 					window.location.href = newHref;
@@ -591,7 +593,7 @@ damo.method.BuildSingleLoop = function(elem) {
 			//find and impact child ids ------------------------
 			newEl.find('[damo-id^="'+item+'."]').each(function() {
 				var reg;
-				reg = new RegExp('^'+damo.method.addSlashes(item)+'\.','g');						
+				reg = new RegExp('^'+damo.method.addSlashes(item)+'\.','g');					
 				$(this).attr(
 					'damo-id',
 					$(this)	.attr('damo-id')
@@ -672,6 +674,7 @@ damo.method.BuildLoops = function(scope) {
 	}
 	
 };
+
 /**
  * @method renewLoop
  * @memberOf damo.method
@@ -697,7 +700,6 @@ damo.method.renewLoop = function(str) {
 	catch(err) {
 		return '';
 	}
-
 	$('[damo-looping-start="'+str+'"]').each(function() {
 
 		var el = $(this);
@@ -740,19 +742,27 @@ damo.method.renewLoop = function(str) {
 			while(list.length!=N+1) {
 				var clone 	= el.clone(true,true);
 				var str 	= 	clone[0].outerHTML;		
+				var replace = listName;
+				var reg = new RegExp(damo.method.addSlashes(listName),"g");
+				//var reg = new RegExp(damo.method.addSlashes(listName),"g");
+				str = str.replace(reg, '###kk###');
 				str = str	.replace(/\\n/g, '')
 							.replace(/_([0-9]+)\"/g, '_'+(N+1)+'"')
 							.replace(/\[([0-9]+)\]/g, '['+(N+1)+']')
 							.replace(/\(([0-9]+)\)/g, '('+(N+1)+')')
 							+'\n';
+				reg = new RegExp('###kk###',"g");
+				str = str.replace(reg, listName);
+				
 				clone = $(str);
-				/*
-				clone.find('[damo-id]').each(function() {
+				//===============
+				/*clone.find('[damo-id]').each(function() {
 					var oldid = $(this).attr('damo-id');
 					var reg = new RegExp(damo.method.addSlashes(listName)+'\[[0-9]+\]','g');
 					var newid = oldid.replace(reg, listName+'['+(N+1)+']');
 					$(this).attr('damo-id',newid);
-				});*/		
+				});	*/	
+				//===============
 				el.after(clone);
 				newEl = el.next();
 				newEl.attr('damo-looping-end',el.attr('damo-looping-end'));
@@ -760,6 +770,9 @@ damo.method.renewLoop = function(str) {
 				if(newEl.attr('damo-looping-start')) {
 					newEl.removeAttr('damo-looping-start');
 				}
+				newEl.find('input').change(function() { });
+				newEl.find('textarea').change(function() { });
+				newEl.find('select').change(function() {});
 				newEl.show();
 				el=el.next();
 				N++;
@@ -768,6 +781,8 @@ damo.method.renewLoop = function(str) {
 		
 	});
 	
+	
+//damo.method.twoWayDataBinding();
 	damo.method.setTriggers();
 	damo.method.SetDomValues();
 	
@@ -1006,11 +1021,10 @@ damo.method.setTriggers = function() {
  * @param {jqueryElement} scope The concerned JQuery scope element
  */
 damo.method.getLang = function(scope) {
-
 	if(!scope) {
 		scope = $('body');
 	}
-	var ul = navigator.language.replace(/\-.*$/, '');
+	var ul = navigator.language;
 	$.get('lang/'+ul+'.json', function(data) {
 		damo.dm.lang = data;
 	}).done(function() {//success
@@ -1084,7 +1098,6 @@ damo.method.build = function(scope) {
 };
 
 $( document ).ready(function() {
-	
 	$.get('data/datamodel.json', function(data) {
 		damo.dm = data
 	})
