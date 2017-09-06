@@ -1,5 +1,5 @@
 /*!
- * Damo JavaScript Library v0.0.1
+ * Damo JavaScript Library v2.0
  * http://www.oceanvirtuel.com/damo
  * Author Herve Le Cornec, hcl@oceanvirtuel.com
  * Copyright 2016 Herve Le Cornec
@@ -11,7 +11,7 @@
  * Released under the MIT license
  * http://jquery.org/license
  *
- * Date: Sat, 01 May 2017 01:11:54 +0200
+ * Date: Sat, 06 Sept 2017 01:11:54 +0200
  */
 
 
@@ -744,7 +744,6 @@ damo.method.renewLoop = function(str) {
 				var str 	= 	clone[0].outerHTML;		
 				var replace = listName;
 				var reg = new RegExp(damo.method.addSlashes(listName),"g");
-				//var reg = new RegExp(damo.method.addSlashes(listName),"g");
 				str = str.replace(reg, '###kk###');
 				str = str	.replace(/\\n/g, '')
 							.replace(/_([0-9]+)\"/g, '_'+(N+1)+'"')
@@ -755,14 +754,6 @@ damo.method.renewLoop = function(str) {
 				str = str.replace(reg, listName);
 				
 				clone = $(str);
-				//===============
-				/*clone.find('[damo-id]').each(function() {
-					var oldid = $(this).attr('damo-id');
-					var reg = new RegExp(damo.method.addSlashes(listName)+'\[[0-9]+\]','g');
-					var newid = oldid.replace(reg, listName+'['+(N+1)+']');
-					$(this).attr('damo-id',newid);
-				});	*/	
-				//===============
 				el.after(clone);
 				newEl = el.next();
 				newEl.attr('damo-looping-end',el.attr('damo-looping-end'));
@@ -781,8 +772,6 @@ damo.method.renewLoop = function(str) {
 		
 	});
 	
-	
-//damo.method.twoWayDataBinding();
 	damo.method.setTriggers();
 	damo.method.SetDomValues();
 	
