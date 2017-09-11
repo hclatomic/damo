@@ -1,0 +1,20 @@
+{
+  "name": "damoseed",
+  "version": "1.0.0",
+  "description": "A seed code to start a Damo V2 project",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hclatomic/damo/tree/master/damoSeed"
+  },
+  "keywords": [
+    "damo",
+    "damo",
+    "v2"
+  ],
+  "author": "Herve Le Cornec",
+  "license": "GPL-3.0"
+}
