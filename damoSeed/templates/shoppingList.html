@@ -1,0 +1,14 @@
+<div style="width : 50%">
+	<ul>
+		<li damo-loop="item in user.shoppingCart.list">
+			<div>
+				<span style="color:green;fon-weight:bold">$index</span>
+				<span damo-id="item.name"></span>
+				<span damo-id="item.price" style="float:right" damo-filter="setPriceInEuro"></span>
+			</div>
+		</li>
+	</ul>
+	<hr>
+	<span damo-lang="total"></span>
+	<span damo-id="user.shoppingCart.total" style="float:right" damo-filter="boldify"></span>
+</div>

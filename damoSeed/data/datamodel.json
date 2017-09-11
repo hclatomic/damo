@@ -1,0 +1,31 @@
+{
+	"user" : {
+		"firstName"	: "John",
+		"lastName"	: "Doe",
+		"email"		: "john@doe.com",
+		"tel" 		: "0123456789",
+		"address"	: "36 Baker Street, NY, USA",
+		"avis"		: "",
+		"shoppingCart" : {
+			"list" : [
+				{
+					"name" : "Bread",
+					"price" : 1.49
+				},
+				{
+					"name" : "Fruits",
+					"price" : 3.30
+				},
+				{
+					"name" : "Salad",
+					"price" : 0.95
+				},
+				{
+					"name" : "Rice",
+					"price" : 2.18
+				}
+			],
+			"total" : 0.0
+		}
+	}
+}

@@ -1,0 +1,13 @@
+<div class="container">    
+	<div class="mainbox col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-12 col-xs-12">
+		<h1>Ceci est la Page 1</h1>
+
+		Donnez votre avis :<br>
+		<textarea damo-id="user.avis" placeholder="vous n'avez pas donné d'avis" style="width:30%;height:100px"></textarea>
+		<div damo-if="user.avis">
+			Votre avis est le suivant :
+			<br>
+			<span damo-id="user.avis" damo-filter="boldify"></span>
+		</div>
+	</div>
+</div>

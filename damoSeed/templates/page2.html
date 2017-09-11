@@ -1,0 +1,12 @@
+<div class="container">    
+	<div class="mainbox col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-12 col-xs-12">
+		<h1>Ceci est la Page 2</h1>
+
+		<div damo-if="user.avis" style="color:red">
+			Votre avis est : <span damo-id="user.avis" damo-filter="boldify"></span>
+		</div>
+		<div damo-if="!user.avis" style="color:blue">
+			<span damo-lang="giveOpinion"></span>
+		</div>
+	</div>
+</div>
